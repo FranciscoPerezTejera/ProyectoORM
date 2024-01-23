@@ -1,6 +1,7 @@
 package com.francisco.connection;
 
 
+import interfaces.PantallaPrincipal;
 import java.sql.Connection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,15 +11,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Configuration configuracion = new Configuration().configure("hibernate.cfg.xml");
+        /*Configuration configuracion = new Configuration().configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuracion.buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();^*/
         
-        /*PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(conexionBaseDeDatos());
-        newPantallaPrincipal.setVisible(true);*/
+        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(conexionBaseDeDatos());
         
-        session.close();
-        sessionFactory.close();
+        /*session.close();
+        sessionFactory.close();*/
     }
     
     private static Connection conexionBaseDeDatos() {

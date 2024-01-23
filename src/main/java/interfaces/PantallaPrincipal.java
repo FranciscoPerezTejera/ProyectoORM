@@ -17,6 +17,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.connection = connection;
         this.posibleError = new StringBuilder();
+        this.setVisible(true);
     }
 
     public PantallaPrincipal(Connection con, StringBuilder posibleError) {
@@ -24,8 +25,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.connection = con;
         this.posibleError = posibleError;
-
         textArea.append(posibleError.toString());
+        this.setVisible(true);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -38,6 +40,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         textArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         insercionDato = new javax.swing.JMenu();
+        insercionDePersonaMenu = new javax.swing.JMenuItem();
+        insercionDeVueloMenu = new javax.swing.JMenuItem();
+        insercionDeAvionMenu = new javax.swing.JMenuItem();
+        borradoDatos = new javax.swing.JMenu();
+        borradoDePiloto = new javax.swing.JMenuItem();
+        borradoDeMiembro = new javax.swing.JMenuItem();
+        borradoDeVuelo = new javax.swing.JMenuItem();
+        borradoDeAvion = new javax.swing.JMenuItem();
+        actualizarDatos = new javax.swing.JMenu();
+        actualizarUnPiloto = new javax.swing.JMenuItem();
+        actualizarUnMiembro = new javax.swing.JMenuItem();
+        actualizarUnVuelo = new javax.swing.JMenuItem();
+        actualizarUnAvion = new javax.swing.JMenuItem();
         disconnectJMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,18 +84,129 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addGap(47, 47, 47)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
+        jMenuBar1.setBackground(new java.awt.Color(0, 153, 255));
+        jMenuBar1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jMenuBar1.setMinimumSize(new java.awt.Dimension(700, 30));
 
-        insercionDato.setText("INSERTAR DATOS");
+        insercionDato.setBorder(null);
+        insercionDato.setText("INSERCIÓN DE DATOS");
+        insercionDato.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        insercionDato.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        insercionDato.setMargin(new java.awt.Insets(11, 11, 11, 11));
+
+        insercionDePersonaMenu.setText("Insertar una nueva Persona (Piloto o miembro)");
+        insercionDePersonaMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insercionDePersonaMenuActionPerformed(evt);
+            }
+        });
+        insercionDato.add(insercionDePersonaMenu);
+
+        insercionDeVueloMenu.setText("Insertar un nuevo Vuelo");
+        insercionDeVueloMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insercionDeVueloMenuActionPerformed(evt);
+            }
+        });
+        insercionDato.add(insercionDeVueloMenu);
+
+        insercionDeAvionMenu.setText("Insertar un nuevo Avión");
+        insercionDeAvionMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insercionDeAvionMenuActionPerformed(evt);
+            }
+        });
+        insercionDato.add(insercionDeAvionMenu);
+
         jMenuBar1.add(insercionDato);
 
+        borradoDatos.setBorder(null);
+        borradoDatos.setText("BORRADO DE DATOS");
+        borradoDatos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        borradoDatos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        borradoDatos.setMargin(new java.awt.Insets(11, 11, 11, 11));
+
+        borradoDePiloto.setText("Borrado de un Piloto");
+        borradoDePiloto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borradoDePilotoActionPerformed(evt);
+            }
+        });
+        borradoDatos.add(borradoDePiloto);
+
+        borradoDeMiembro.setText("Borrado de un Miembro");
+        borradoDeMiembro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borradoDeMiembroActionPerformed(evt);
+            }
+        });
+        borradoDatos.add(borradoDeMiembro);
+
+        borradoDeVuelo.setText("Borrado de un Vuelo");
+        borradoDeVuelo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borradoDeVueloActionPerformed(evt);
+            }
+        });
+        borradoDatos.add(borradoDeVuelo);
+
+        borradoDeAvion.setText("Borrado de un Avión");
+        borradoDeAvion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borradoDeAvionActionPerformed(evt);
+            }
+        });
+        borradoDatos.add(borradoDeAvion);
+
+        jMenuBar1.add(borradoDatos);
+
+        actualizarDatos.setBorder(null);
+        actualizarDatos.setText("ACTUALIZACIÓN DE DATOS");
+        actualizarDatos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        actualizarDatos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        actualizarDatos.setMargin(new java.awt.Insets(11, 11, 11, 11));
+
+        actualizarUnPiloto.setText("Actualización de un Piloto");
+        actualizarUnPiloto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarUnPilotoActionPerformed(evt);
+            }
+        });
+        actualizarDatos.add(actualizarUnPiloto);
+
+        actualizarUnMiembro.setText("Actualización de un Miembro");
+        actualizarUnMiembro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarUnMiembroActionPerformed(evt);
+            }
+        });
+        actualizarDatos.add(actualizarUnMiembro);
+
+        actualizarUnVuelo.setText("Actualización de un Vuelo");
+        actualizarUnVuelo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarUnVueloActionPerformed(evt);
+            }
+        });
+        actualizarDatos.add(actualizarUnVuelo);
+
+        actualizarUnAvion.setText("Actualización de un Avión");
+        actualizarUnAvion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarUnAvionActionPerformed(evt);
+            }
+        });
+        actualizarDatos.add(actualizarUnAvion);
+
+        jMenuBar1.add(actualizarDatos);
+
         disconnectJMenu.setText("SALIR");
-        disconnectJMenu.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        disconnectJMenu.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        disconnectJMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        disconnectJMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         disconnectJMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 disconnectJMenuMouseClicked(evt);
@@ -120,10 +246,67 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_disconnectJMenuMouseClicked
 
+    private void insercionDePersonaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDePersonaMenuActionPerformed
+        PantallaInsercionPersona nuevaPantallaInsercionPersona = new PantallaInsercionPersona();
+    }//GEN-LAST:event_insercionDePersonaMenuActionPerformed
+
+    private void insercionDeVueloMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeVueloMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_insercionDeVueloMenuActionPerformed
+
+    private void insercionDeAvionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeAvionMenuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_insercionDeAvionMenuActionPerformed
+
+    private void borradoDePilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDePilotoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_borradoDePilotoActionPerformed
+
+    private void borradoDeMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeMiembroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_borradoDeMiembroActionPerformed
+
+    private void borradoDeVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeVueloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_borradoDeVueloActionPerformed
+
+    private void borradoDeAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeAvionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_borradoDeAvionActionPerformed
+
+    private void actualizarUnPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnPilotoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actualizarUnPilotoActionPerformed
+
+    private void actualizarUnMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnMiembroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actualizarUnMiembroActionPerformed
+
+    private void actualizarUnVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnVueloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actualizarUnVueloActionPerformed
+
+    private void actualizarUnAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnAvionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_actualizarUnAvionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu actualizarDatos;
+    private javax.swing.JMenuItem actualizarUnAvion;
+    private javax.swing.JMenuItem actualizarUnMiembro;
+    private javax.swing.JMenuItem actualizarUnPiloto;
+    private javax.swing.JMenuItem actualizarUnVuelo;
+    private javax.swing.JMenu borradoDatos;
+    private javax.swing.JMenuItem borradoDeAvion;
+    private javax.swing.JMenuItem borradoDeMiembro;
+    private javax.swing.JMenuItem borradoDePiloto;
+    private javax.swing.JMenuItem borradoDeVuelo;
     private javax.swing.JMenu disconnectJMenu;
     private javax.swing.JMenu insercionDato;
+    private javax.swing.JMenuItem insercionDeAvionMenu;
+    private javax.swing.JMenuItem insercionDePersonaMenu;
+    private javax.swing.JMenuItem insercionDeVueloMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
