@@ -116,18 +116,10 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="actualizarUnPiloto">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Actualizaci&#xf3;n de un Piloto"/>
+                <Property name="text" type="java.lang.String" value="Actualizaci&#xf3;n de una Persona (Piloto o Miembro)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualizarUnPilotoActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="actualizarUnMiembro">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Actualizaci&#xf3;n de un Miembro"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualizarUnMiembroActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="actualizarUnVuelo">

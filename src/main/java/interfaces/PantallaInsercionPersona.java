@@ -1,26 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
-/**
- *
- * @author OTOKODA
- */
+import org.hibernate.Session;
+
+
 public class PantallaInsercionPersona extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PantallaInsercionPersona
-     */
-    public PantallaInsercionPersona() {
+    private Session session;
+    
+    public PantallaInsercionPersona(Session session) {
         initComponents();
+        this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         
-        pilotoJcheckBox.addActionListener((e) -> {
+        isPiloto.addActionListener((e) -> {
            
-            if (pilotoJcheckBox.isSelected()) {
+            if (isPiloto.isSelected()) {
             
                 horasDeVueloJLabel.setEnabled(true);
                 horasDeVueloPilotoTextField.setEnabled(true);
@@ -51,11 +46,9 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
         condigoPersonaTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         nombrePersonaTextfield = new javax.swing.JTextField();
-        pilotoJcheckBox = new javax.swing.JCheckBox();
+        isPiloto = new javax.swing.JCheckBox();
         cancelarInsercionJButton = new javax.swing.JButton();
         insertarPersonaJButton = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        numeroDeVueloTextField = new javax.swing.JTextField();
         horasDeVueloJLabel = new javax.swing.JLabel();
         horasDeVueloPilotoTextField = new javax.swing.JTextField();
 
@@ -79,9 +72,9 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
         nombrePersonaTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         nombrePersonaTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-        pilotoJcheckBox.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        pilotoJcheckBox.setText("¿LA PERSONA ES UN PILOTO?");
-        pilotoJcheckBox.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        isPiloto.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        isPiloto.setText("¿LA PERSONA ES UN PILOTO?");
+        isPiloto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         cancelarInsercionJButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         cancelarInsercionJButton.setText("CANCELAR");
@@ -99,13 +92,6 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Nombre de la persona:");
-
-        numeroDeVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        numeroDeVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        numeroDeVueloTextField.setMaximumSize(null);
-
         horasDeVueloJLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         horasDeVueloJLabel.setText("Horas de vuelo del piloto:");
         horasDeVueloJLabel.setEnabled(false);
@@ -120,16 +106,24 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(186, 186, 186)
+                        .addComponent(horasDeVueloPilotoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(isPiloto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pilotoJcheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(horasDeVueloJLabel)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(horasDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(horasDeVueloPilotoTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(cancelarInsercionJButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -137,13 +131,10 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(jLabel3))
                                 .addGap(17, 17, 17)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(nombrePersonaTextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                                    .addComponent(numeroDeVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(condigoPersonaTextField))
                                 .addGap(3, 3, 3)))
                         .addGap(21, 21, 21))))
@@ -161,17 +152,13 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(nombrePersonaTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numeroDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(pilotoJcheckBox)
+                .addGap(34, 34, 34)
+                .addComponent(isPiloto)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(horasDeVueloPilotoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(horasDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelarInsercionJButton)
                     .addComponent(insertarPersonaJButton))
@@ -193,6 +180,17 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void insertarPersonaJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarPersonaJButtonActionPerformed
+        
+        String codigoPersona = condigoPersonaTextField.getText();
+        String nombrePersona = nombrePersonaTextfield.getText();
+        
+        if (isPiloto.isSelected()) {
+        
+            String horasDeVuelo = horasDeVueloPilotoTextField.getText();
+        }
+        
+        
+        
         this.dispose();
     }//GEN-LAST:event_insertarPersonaJButtonActionPerformed
 
@@ -207,13 +205,11 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
     private javax.swing.JLabel horasDeVueloJLabel;
     private javax.swing.JTextField horasDeVueloPilotoTextField;
     private javax.swing.JButton insertarPersonaJButton;
+    private javax.swing.JCheckBox isPiloto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField nombrePersonaTextfield;
-    private javax.swing.JTextField numeroDeVueloTextField;
-    private javax.swing.JCheckBox pilotoJcheckBox;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,10 +1,9 @@
 package interfaces;
 
+public class PantallaActualizarVuelo extends javax.swing.JFrame {
 
-public class PantallaInsercionVuelo extends javax.swing.JFrame {
 
-    
-    public PantallaInsercionVuelo() {
+    public PantallaActualizarVuelo() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -22,22 +21,22 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         numeroDeVueloTextfield = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         origenDelVueloTextField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        destinoDelVueloTextField = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
-        horadeDeVueloJLabel = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         destinoDelVueloTextField1 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        horadeDeVueloJLabel = new javax.swing.JLabel();
+        jSlider1 = new javax.swing.JSlider();
+        destinoDelVueloTextField = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         cancelarInsercionVueloButton = new javax.swing.JButton();
         insertarNuevoVueloButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        pilotoDelVueloJCheckBox = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        miembroDelVueloJCheckBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,42 +45,42 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
 
         numeroDeVueloTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         numeroDeVueloTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        numeroDeVueloTextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numeroDeVueloTextfieldActionPerformed(evt);
+            }
+        });
+
+        origenDelVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        origenDelVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        origenDelVueloTextField.setEnabled(false);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Origen del vuelo:");
 
-        origenDelVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        origenDelVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        origenDelVueloTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                origenDelVueloTextFieldActionPerformed(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText("Destino del vuelo:");
 
-        destinoDelVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        destinoDelVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        destinoDelVueloTextField.setMaximumSize(null);
-
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("CREACIÓN DE UN NUEVO VUELO");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        destinoDelVueloTextField1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        destinoDelVueloTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        destinoDelVueloTextField1.setEnabled(false);
+        destinoDelVueloTextField1.setMaximumSize(null);
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setText("Hora de vuelo:");
 
         horadeDeVueloJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        horadeDeVueloJLabel.setText("hora");
+        horadeDeVueloJLabel.setText("   ");
+
+        jSlider1.setEnabled(false);
+
+        destinoDelVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        destinoDelVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        destinoDelVueloTextField.setEnabled(false);
+        destinoDelVueloTextField.setMaximumSize(null);
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText("Fecha del vuelo:");
-
-        destinoDelVueloTextField1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        destinoDelVueloTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        destinoDelVueloTextField1.setMaximumSize(null);
 
         cancelarInsercionVueloButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         cancelarInsercionVueloButton.setText("CANCELAR");
@@ -99,15 +98,22 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("ACTUALIZAR VUELO");
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Piloto del vuelo:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pilotoDelVueloJCheckBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pilotoDelVueloJCheckBox.setEnabled(false);
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Miembro del vuelo:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        miembroDelVueloJCheckBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        miembroDelVueloJCheckBox.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -121,41 +127,40 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel5)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(17, 17, 17)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(origenDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                    .addComponent(numeroDeVueloTextfield)
+                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                                    .addComponent(destinoDelVueloTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(cancelarInsercionVueloButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(insertarNuevoVueloButton))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE)
-                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(jLabel5)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                        .addGap(17, 17, 17))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel8)
-                                            .addComponent(jLabel7))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(origenDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                                    .addComponent(numeroDeVueloTextfield)
-                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                                    .addComponent(destinoDelVueloTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(miembroDelVueloJCheckBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pilotoDelVueloJCheckBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(24, 24, 24)))
                 .addContainerGap())
         );
@@ -187,17 +192,17 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
                     .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pilotoDelVueloJCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(miembroDelVueloJCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelarInsercionVueloButton)
                     .addComponent(insertarNuevoVueloButton))
-                .addGap(32, 32, 32))
+                .addGap(30, 30, 30))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -222,9 +227,9 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_insertarNuevoVueloButtonActionPerformed
 
-    private void origenDelVueloTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_origenDelVueloTextFieldActionPerformed
+    private void numeroDeVueloTextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numeroDeVueloTextfieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_origenDelVueloTextFieldActionPerformed
+    }//GEN-LAST:event_numeroDeVueloTextfieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -233,8 +238,6 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
     private javax.swing.JTextField destinoDelVueloTextField1;
     private javax.swing.JLabel horadeDeVueloJLabel;
     private javax.swing.JButton insertarNuevoVueloButton;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -245,7 +248,9 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSlider jSlider1;
+    private javax.swing.JComboBox<String> miembroDelVueloJCheckBox;
     private javax.swing.JTextField numeroDeVueloTextfield;
     private javax.swing.JTextField origenDelVueloTextField;
+    private javax.swing.JComboBox<String> pilotoDelVueloJCheckBox;
     // End of variables declaration//GEN-END:variables
 }

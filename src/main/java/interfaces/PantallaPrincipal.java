@@ -6,24 +6,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Session;
 
 public class PantallaPrincipal extends javax.swing.JFrame {
 
-    Connection connection;
+    //Connection connection;
+    private Session session;
     StringBuilder posibleError;
 
-    public PantallaPrincipal(Connection connection) {
+    public PantallaPrincipal(Session session) {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.connection = connection;
+        //this.connection = connection;
+        this.session = session;
         this.posibleError = new StringBuilder();
         this.setVisible(true);
     }
 
-    public PantallaPrincipal(Connection con, StringBuilder posibleError) {
+    public PantallaPrincipal(Session session, StringBuilder posibleError) {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.connection = con;
+        //this.connection = con;
+        this.session = session;
         this.posibleError = posibleError;
         textArea.append(posibleError.toString());
         this.setVisible(true);
@@ -50,7 +54,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         borradoDeAvion = new javax.swing.JMenuItem();
         actualizarDatos = new javax.swing.JMenu();
         actualizarUnPiloto = new javax.swing.JMenuItem();
-        actualizarUnMiembro = new javax.swing.JMenuItem();
         actualizarUnVuelo = new javax.swing.JMenuItem();
         actualizarUnAvion = new javax.swing.JMenuItem();
         disconnectJMenu = new javax.swing.JMenu();
@@ -170,21 +173,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         actualizarDatos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         actualizarDatos.setMargin(new java.awt.Insets(11, 11, 11, 11));
 
-        actualizarUnPiloto.setText("Actualización de un Piloto");
+        actualizarUnPiloto.setText("Actualización de una Persona (Piloto o Miembro)");
         actualizarUnPiloto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualizarUnPilotoActionPerformed(evt);
             }
         });
         actualizarDatos.add(actualizarUnPiloto);
-
-        actualizarUnMiembro.setText("Actualización de un Miembro");
-        actualizarUnMiembro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualizarUnMiembroActionPerformed(evt);
-            }
-        });
-        actualizarDatos.add(actualizarUnMiembro);
 
         actualizarUnVuelo.setText("Actualización de un Vuelo");
         actualizarUnVuelo.addActionListener(new java.awt.event.ActionListener() {
@@ -232,8 +227,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void disconnectJMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_disconnectJMenuMouseClicked
 
-        try {
-            connection.close();
+        /*try {
+           // connection.close();
             System.out.println("Conexión con el servidor cerrada.");
         } catch (SQLException ex) {
 
@@ -242,59 +237,55 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             textArea.append("-1");
             textArea.append("\n----------------------------------------------------\n");
 
-        }
+        }*/
+        this.session.close();
         this.dispose();
     }//GEN-LAST:event_disconnectJMenuMouseClicked
 
     private void insercionDePersonaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDePersonaMenuActionPerformed
-        PantallaInsercionPersona nuevaPantallaInsercionPersona = new PantallaInsercionPersona();
+        PantallaInsercionPersona nuevaPantallaInsercionPersona = new PantallaInsercionPersona(session);
     }//GEN-LAST:event_insercionDePersonaMenuActionPerformed
 
     private void insercionDeVueloMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeVueloMenuActionPerformed
-        // TODO add your handling code here:
+        PantallaInsercionVuelo nuevaPantallaInsercionVuelo = new PantallaInsercionVuelo();
     }//GEN-LAST:event_insercionDeVueloMenuActionPerformed
 
     private void insercionDeAvionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeAvionMenuActionPerformed
-        // TODO add your handling code here:
+        PantallaInsercionAvion nuevaPantallaInsercionAvion = new PantallaInsercionAvion();
     }//GEN-LAST:event_insercionDeAvionMenuActionPerformed
 
     private void borradoDePilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDePilotoActionPerformed
-        // TODO add your handling code here:
+        PantallaBorradoPiloto nuevaPantallaBorradoPiloto = new PantallaBorradoPiloto();
     }//GEN-LAST:event_borradoDePilotoActionPerformed
 
     private void borradoDeMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeMiembroActionPerformed
-        // TODO add your handling code here:
+        PantallaBorradoMiembro nuevaPantallaBorradoMiembro = new PantallaBorradoMiembro();
     }//GEN-LAST:event_borradoDeMiembroActionPerformed
 
     private void borradoDeVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeVueloActionPerformed
-        // TODO add your handling code here:
+        PantallaBorradoVuelo nuevaPantallaBorradoVuelo = new PantallaBorradoVuelo();
     }//GEN-LAST:event_borradoDeVueloActionPerformed
 
     private void borradoDeAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeAvionActionPerformed
-        // TODO add your handling code here:
+        PantallaBorradoAvion nuevaPantallaBorradoAvion = new PantallaBorradoAvion();
     }//GEN-LAST:event_borradoDeAvionActionPerformed
 
     private void actualizarUnPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnPilotoActionPerformed
-        // TODO add your handling code here:
+        PantallaActualizarPersona nuevaPantallaActualizarPersona = new PantallaActualizarPersona();
     }//GEN-LAST:event_actualizarUnPilotoActionPerformed
 
-    private void actualizarUnMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnMiembroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_actualizarUnMiembroActionPerformed
-
     private void actualizarUnVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnVueloActionPerformed
-        // TODO add your handling code here:
+        PantallaActualizarVuelo nuevaPantallaActualizarVuelo = new PantallaActualizarVuelo();
     }//GEN-LAST:event_actualizarUnVueloActionPerformed
 
     private void actualizarUnAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnAvionActionPerformed
-        // TODO add your handling code here:
+        PantallaActualizarAvion nuevaPantallaActualizarAvion = new PantallaActualizarAvion();
     }//GEN-LAST:event_actualizarUnAvionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu actualizarDatos;
     private javax.swing.JMenuItem actualizarUnAvion;
-    private javax.swing.JMenuItem actualizarUnMiembro;
     private javax.swing.JMenuItem actualizarUnPiloto;
     private javax.swing.JMenuItem actualizarUnVuelo;
     private javax.swing.JMenu borradoDatos;
