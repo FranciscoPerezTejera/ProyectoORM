@@ -1,9 +1,17 @@
 package interfaces;
 
+import entities.Avion;
+import entities.Miembro;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 public class PantallaBorradoMiembro extends javax.swing.JFrame {
 
-    public PantallaBorradoMiembro() {
+    private Session session;
+
+    public PantallaBorradoMiembro(Session session) {
         initComponents();
+        this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -20,7 +28,7 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        codigoMiembroTextfield = new javax.swing.JTextField();
+        idMiembroTextfield = new javax.swing.JTextField();
         cancelarBorradoMiembroButton = new javax.swing.JButton();
         borradoMiembroButton = new javax.swing.JButton();
 
@@ -32,10 +40,10 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Codigo del miembro:");
+        jLabel3.setText("ID del miembro:");
 
-        codigoMiembroTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        codigoMiembroTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idMiembroTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        idMiembroTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         cancelarBorradoMiembroButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         cancelarBorradoMiembroButton.setText("CANCELAR");
@@ -66,9 +74,9 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(borradoMiembroButton))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(codigoMiembroTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addComponent(idMiembroTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(38, 38, 38))
         );
         jPanel1Layout.setVerticalGroup(
@@ -78,7 +86,7 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(codigoMiembroTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(idMiembroTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -103,17 +111,54 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
 
     private void cancelarBorradoMiembroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBorradoMiembroButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarBorradoMiembroButtonActionPerformed
 
     private void borradoMiembroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoMiembroButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("El avión con ID" + idMiembroTextfield.getText() + ", ha sido eliminado correctamente.\n");
+        Transaction transaction = null;
+        Miembro miembroABorrar = new Miembro();
+
+        try {
+            miembroABorrar = session.get(Miembro.class, Integer.parseInt(idMiembroTextfield.getText()));
+            System.out.println(miembroABorrar.toString());
+
+            if (miembroABorrar.equals(null)) {
+                throw new Exception();
+
+            } else {
+
+                transaction = session.beginTransaction();
+                session.remove(miembroABorrar);
+                transaction.commit();
+            }
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            } else {
+                posibleError = new StringBuilder();
+                posibleError.append("El avión con ID " + idMiembroTextfield.getText() + ", "
+                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
+
         this.dispose();
+        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borradoMiembroButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton borradoMiembroButton;
     private javax.swing.JButton cancelarBorradoMiembroButton;
-    private javax.swing.JTextField codigoMiembroTextfield;
+    private javax.swing.JTextField idMiembroTextfield;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

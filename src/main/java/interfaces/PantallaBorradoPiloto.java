@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
-/**
- *
- * @author 2damb
- */
+import entities.Piloto;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 public class PantallaBorradoPiloto extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PantallaBorradoPiloto
-     */
-    public PantallaBorradoPiloto() {
+    private Session session;
+
+    public PantallaBorradoPiloto(Session session) {
         initComponents();
+        this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -117,10 +113,48 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
 
     private void cancelarBorradoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBorradoButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarBorradoButtonActionPerformed
 
     private void borrarPilotoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarPilotoButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("El piloto con ID" + codigoPilotoTextfield.getText() + ", ha sido eliminado correctamente.\n");
+        Transaction transaction = null;
+        Piloto pilotoABorrar = new Piloto();
+
+        try {
+            pilotoABorrar = session.get(Piloto.class, Integer.parseInt(codigoPilotoTextfield.getText()));
+            System.out.println(pilotoABorrar.toString());
+
+            if (pilotoABorrar.equals(null)) {
+                throw new Exception();
+
+            } else {
+
+                transaction = session.beginTransaction();
+                session.remove(pilotoABorrar);
+                transaction.commit();
+
+            }
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            } else {
+                posibleError = new StringBuilder();
+                posibleError.append("El avión con ID " + codigoPilotoTextfield.getText() + ", "
+                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
+
         this.dispose();
+        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borrarPilotoButtonActionPerformed
 
 

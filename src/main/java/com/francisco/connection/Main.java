@@ -15,11 +15,7 @@ public class Main {
         Session session = sessionFactory.openSession();
 
         PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session);
-
-        if (session.isOpen()) {
-            session.close();
-            sessionFactory.close();
-        }
+        
     }
 
     private static Connection conexionBaseDeDatos() {

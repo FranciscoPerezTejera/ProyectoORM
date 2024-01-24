@@ -1,11 +1,17 @@
 package interfaces;
 
+import entities.Avion;
+import jakarta.persistence.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class PantallaBorradoAvion extends javax.swing.JFrame {
 
+    private Session session;
 
-    public PantallaBorradoAvion() {
+    public PantallaBorradoAvion(Session session) {
         initComponents();
+        this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -22,7 +28,7 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        codigoAvionTextField = new javax.swing.JTextField();
+        idAvionTextField = new javax.swing.JTextField();
         borrarAvionButton = new javax.swing.JButton();
         cancelarBorradoButton = new javax.swing.JButton();
 
@@ -34,10 +40,10 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Código de avión:");
+        jLabel3.setText("ID del avión:");
 
-        codigoAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        codigoAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        idAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         borrarAvionButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         borrarAvionButton.setText("INSERTAR");
@@ -69,7 +75,7 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(30, 30, 30)
-                        .addComponent(codigoAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(51, 51, 51))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -84,7 +90,7 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(codigoAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(borrarAvionButton)
@@ -107,18 +113,55 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void borrarAvionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarAvionButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("El avión con ID " + idAvionTextField.getText() + ", ha sido eliminado correctamente.\n");
+        Transaction transaction = null;
+        Avion avionABorrar = new Avion();
+
+        try {
+            avionABorrar = session.get(Avion.class, Integer.parseInt(idAvionTextField.getText()));
+            System.out.println(avionABorrar.toString());
+
+            if (avionABorrar.equals(null)) {
+                throw new Exception();
+
+            } else {
+
+                transaction = session.beginTransaction();
+                session.remove(avionABorrar);
+                transaction.commit();
+            }
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            } else {
+                posibleError = new StringBuilder();
+                posibleError.append("El avión con ID " + idAvionTextField.getText() + ", "
+                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
         this.dispose();
+        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borrarAvionButtonActionPerformed
 
     private void cancelarBorradoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBorradoButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
+
     }//GEN-LAST:event_cancelarBorradoButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton borrarAvionButton;
     private javax.swing.JButton cancelarBorradoButton;
-    private javax.swing.JTextField codigoAvionTextField;
+    private javax.swing.JTextField idAvionTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

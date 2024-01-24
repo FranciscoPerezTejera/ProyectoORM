@@ -13,10 +13,10 @@ import java.util.Set;
 public class Miembro extends Persona {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToMany(mappedBy = "miembro")
-    private Set<Vuelo> vuelos;
+    private Set <Vuelo> vuelos;
 
     @Override
     public void setNombrePersona(String nombrePersona) {

@@ -12,8 +12,8 @@ import jakarta.persistence.Table;
 public class Avion {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @Column (name = "codigo_avion")
     private int codigoAvion;
     @Column (name = "tipo_avion")
@@ -45,5 +45,12 @@ public class Avion {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Avion{" + "id=" + id + ", codigoAvion=" + codigoAvion + ", tipoAvion=" + tipoAvion + '}';
+    }
+    
+    
     
 }

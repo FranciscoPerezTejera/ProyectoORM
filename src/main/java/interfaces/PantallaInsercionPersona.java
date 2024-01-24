@@ -1,33 +1,34 @@
 package interfaces;
 
+import entities.Miembro;
+import entities.Piloto;
 import org.hibernate.Session;
-
+import org.hibernate.Transaction;
 
 public class PantallaInsercionPersona extends javax.swing.JFrame {
 
     private Session session;
-    
+
     public PantallaInsercionPersona(Session session) {
         initComponents();
         this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        
+
         isPiloto.addActionListener((e) -> {
-           
+
             if (isPiloto.isSelected()) {
-            
+
                 horasDeVueloJLabel.setEnabled(true);
                 horasDeVueloPilotoTextField.setEnabled(true);
-                
-            }
-            else {
-                
+
+            } else {
+
                 horasDeVueloJLabel.setEnabled(false);
                 horasDeVueloPilotoTextField.setEnabled(false);
                 horasDeVueloPilotoTextField.setText("");
             }
-            
+
         });
     }
 
@@ -180,22 +181,58 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void insertarPersonaJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarPersonaJButtonActionPerformed
-        
+
+        StringBuilder posibleError = new StringBuilder("La inserción se realizo correctamente.\n");
+        Transaction transaction = null;
         String codigoPersona = condigoPersonaTextField.getText();
         String nombrePersona = nombrePersonaTextfield.getText();
-        
+        Piloto nuevoPiloto = null;
+        Miembro nuevoMiembro = null;
+
         if (isPiloto.isSelected()) {
-        
             String horasDeVuelo = horasDeVueloPilotoTextField.getText();
+            nuevoPiloto = new Piloto();
+            nuevoPiloto.setCodigo(Integer.parseInt(codigoPersona));
+            nuevoPiloto.setNombrePersona(nombrePersona);
+            nuevoPiloto.setHoraDeVuelo(Integer.parseInt(horasDeVuelo));
+            posibleError.append("El piloto llamado " + nuevoPiloto.getNombrePersona() + " ha sido insertado con éxito.");
+
+        } else {
+            nuevoMiembro = new Miembro();
+            nuevoMiembro.setCodigo(Integer.parseInt(codigoPersona));
+            nuevoMiembro.setNombrePersona(nombrePersona);
+            posibleError.append("El miembro llamado " + nuevoMiembro.getNombrePersona() + " ha sido insertado con éxito.");
+
         }
-        
-        
-        
+
+        try {
+
+            if (nuevoPiloto != null) {
+                transaction = session.beginTransaction();
+                session.persist(nuevoPiloto);
+                transaction.commit();
+            } else if (nuevoMiembro != null) {
+                transaction = session.beginTransaction();
+                session.persist(nuevoMiembro);
+                transaction.commit();
+            }
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_insertarPersonaJButtonActionPerformed
 
     private void cancelarInsercionJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarInsercionJButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
+
     }//GEN-LAST:event_cancelarInsercionJButtonActionPerformed
 
 

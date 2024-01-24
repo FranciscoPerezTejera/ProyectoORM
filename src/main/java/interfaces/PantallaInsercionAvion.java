@@ -1,11 +1,16 @@
 package interfaces;
 
+import entities.Avion;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class PantallaInsercionAvion extends javax.swing.JFrame {
 
+    private Session session;
 
-    public PantallaInsercionAvion() {
+    public PantallaInsercionAvion(Session session) {
         initComponents();
+        this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -125,10 +130,38 @@ public class PantallaInsercionAvion extends javax.swing.JFrame {
 
     private void cancelarInsercionJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarInsercionJButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarInsercionJButtonActionPerformed
 
     private void insertarAvionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarAvionButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("La inserción se realizo correctamente.\n");
+        Transaction transaction = null;
+        String codigoAvion = codigoAvionTextField.getText();
+        String tipoAvion = tipoDeAvionTextField.getText();
+        Avion nuevoAvion = new Avion();
+
+        nuevoAvion.setCodigoAvion(Integer.parseInt(codigoAvion));
+        nuevoAvion.setTipoAvion(tipoAvion);
+
+        try {
+            transaction = session.beginTransaction();
+            session.persist(nuevoAvion);
+            transaction.commit();
+            posibleError.append("El avión con codigo " + nuevoAvion.getCodigoAvion()
+                    + " y tipo " + nuevoAvion.getTipoAvion()
+                    + " ha sido insertado con éxito.");
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_insertarAvionButtonActionPerformed
 
 

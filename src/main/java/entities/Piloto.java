@@ -15,7 +15,7 @@ import java.util.Set;
 public class Piloto extends Persona {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column (name = "hora_de_vuelo")
     private int horaDeVuelo;

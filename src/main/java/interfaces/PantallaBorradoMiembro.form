@@ -48,9 +48,9 @@
                           <Component id="borradoMiembroButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="jLabel3" max="32767" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="codigoMiembroTextfield" min="-2" pref="120" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" pref="135" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="32767" attributes="0"/>
+                          <Component id="idMiembroTextfield" min="-2" pref="120" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
@@ -64,7 +64,7 @@
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="codigoMiembroTextfield" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="idMiembroTextfield" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -93,10 +93,10 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Codigo del miembro:"/>
+            <Property name="text" type="java.lang.String" value="ID del miembro:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="codigoMiembroTextfield">
+        <Component class="javax.swing.JTextField" name="idMiembroTextfield">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>

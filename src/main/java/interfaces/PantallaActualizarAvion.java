@@ -1,11 +1,18 @@
 package interfaces;
 
+import entities.Avion;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class PantallaActualizarAvion extends javax.swing.JFrame {
 
+    private Session session;
+    private Avion avionActualizado;
 
-    public PantallaActualizarAvion() {
+    public PantallaActualizarAvion(Session session) {
         initComponents();
+        this.session = session;
+        this.avionActualizado = new Avion();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -22,11 +29,14 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        codigoAvionTextField = new javax.swing.JTextField();
+        idAvionTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        tipoDeAvionTextField = new javax.swing.JTextField();
+        codigoAvionTextField = new javax.swing.JTextField();
         cancelarInsercionJButton = new javax.swing.JButton();
         insertarAvionButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        tipoDeAvionTextField = new javax.swing.JTextField();
+        comprobarIDButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -36,17 +46,17 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel2.setText("Codigo de avión:");
+        jLabel2.setText("ID de avión:");
+
+        idAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        idAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel3.setText("codigo de avión:");
 
         codigoAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         codigoAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-
-        jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Tipo de avión:");
-
-        tipoDeAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        tipoDeAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        tipoDeAvionTextField.setEnabled(false);
+        codigoAvionTextField.setEnabled(false);
 
         cancelarInsercionJButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         cancelarInsercionJButton.setText("CANCELAR");
@@ -64,6 +74,20 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel4.setText("Tipo de avión:");
+
+        tipoDeAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tipoDeAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tipoDeAvionTextField.setEnabled(false);
+
+        comprobarIDButton.setText("BUSCAR");
+        comprobarIDButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comprobarIDButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -74,19 +98,28 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(17, 17, 17))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(68, 68, 68)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tipoDeAvionTextField)
+                                    .addComponent(codigoAvionTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(idAvionTextField)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(comprobarIDButton))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(cancelarInsercionJButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(insertarAvionButton))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(17, 17, 17)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tipoDeAvionTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                                    .addComponent(codigoAvionTextField))))
+                                .addComponent(insertarAvionButton)))
                         .addGap(24, 24, 24)))
                 .addContainerGap())
         );
@@ -98,16 +131,21 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(codigoAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comprobarIDButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
+                    .addComponent(codigoAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
                     .addComponent(tipoDeAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(insertarAvionButton)
                     .addComponent(cancelarInsercionJButton))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -126,20 +164,84 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
 
     private void cancelarInsercionJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarInsercionJButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarInsercionJButtonActionPerformed
 
     private void insertarAvionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarAvionButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("La inserción se realizo correctamente.\n");
+        Transaction transaction = null;
+        
+        String codigoAvion = codigoAvionTextField.getText();
+        String tipoAvion = tipoDeAvionTextField.getText();
+        
+        
+
+        try {
+            System.out.println(avionActualizado.toString());
+            avionActualizado.setCodigoAvion(Integer.parseInt(codigoAvion));
+            avionActualizado.setTipoAvion(tipoAvion);
+            transaction = session.beginTransaction();
+            session.merge(avionActualizado);
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            } else {
+                posibleError = new StringBuilder();
+                posibleError.append("El avión con ID " + idAvionTextField.getText() + ", "
+                        + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_insertarAvionButtonActionPerformed
+
+    private void comprobarIDButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprobarIDButtonActionPerformed
+
+        String idAvion = idAvionTextField.getText();
+        Avion avionComprobacion = session.get(Avion.class, idAvion);
+
+        try {
+
+            if (avionComprobacion.equals(null)) {
+
+                throw new Exception();
+
+            } else {
+
+                codigoAvionTextField.setEnabled(true);
+                tipoDeAvionTextField.setEnabled(true);
+                codigoAvionTextField.setText(String.valueOf(avionComprobacion.getCodigoAvion()));
+                tipoDeAvionTextField.setText(avionComprobacion.getTipoAvion());
+                avionActualizado = avionComprobacion;
+            }
+
+        } catch (Exception e) {
+
+            //Lanzar un panel que te diga que ese avion no existe en la base de datos
+        }
+
+    }//GEN-LAST:event_comprobarIDButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelarInsercionJButton;
     private javax.swing.JTextField codigoAvionTextField;
+    private javax.swing.JButton comprobarIDButton;
+    private javax.swing.JTextField idAvionTextField;
     private javax.swing.JButton insertarAvionButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField tipoDeAvionTextField;
     // End of variables declaration//GEN-END:variables

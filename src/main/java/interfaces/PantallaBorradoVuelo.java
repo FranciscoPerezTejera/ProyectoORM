@@ -1,20 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
-/**
- *
- * @author 2damb
- */
+import entities.Piloto;
+import entities.Vuelo;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 public class PantallaBorradoVuelo extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PantallaBorradoVuelo
-     */
-    public PantallaBorradoVuelo() {
+    private Session session;
+
+    public PantallaBorradoVuelo(Session session) {
         initComponents();
+
+        this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -31,7 +29,7 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        numeroDeVueloTextField = new javax.swing.JTextField();
+        idVueloTextField = new javax.swing.JTextField();
         cancelarBorradoButton = new javax.swing.JButton();
         borrarVueloButton = new javax.swing.JButton();
 
@@ -43,10 +41,10 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Número del vuelo:");
+        jLabel3.setText("ID del vuelo:");
 
-        numeroDeVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        numeroDeVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        idVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         cancelarBorradoButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         cancelarBorradoButton.setText("CANCELAR");
@@ -74,12 +72,13 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cancelarBorradoButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(borrarVueloButton))
+                        .addComponent(borrarVueloButton)
+                        .addGap(51, 51, 51))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(30, 30, 30)
-                        .addComponent(numeroDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(51, 51, 51))
+                        .addGap(27, 27, 27)
+                        .addComponent(idVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -93,7 +92,7 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(numeroDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(idVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(borrarVueloButton)
@@ -117,9 +116,48 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
 
     private void cancelarBorradoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBorradoButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarBorradoButtonActionPerformed
 
     private void borrarVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarVueloButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("El vuelo con ID" + idVueloTextField.getText() + ", ha sido eliminado correctamente.\n");
+        Transaction transaction = null;
+        Vuelo vueloABorrar = new Vuelo();
+
+        try {
+            vueloABorrar = session.get(Vuelo.class, Integer.parseInt(idVueloTextField.getText()));
+            System.out.println(vueloABorrar);
+
+            if (vueloABorrar.equals(null)) {
+                throw new Exception();
+
+            } else {
+
+                transaction = session.beginTransaction();
+                session.remove(vueloABorrar);
+                transaction.commit();
+
+            }
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            } else {
+                posibleError = new StringBuilder();
+                posibleError.append("El avión con ID " + idVueloTextField.getText() + ", "
+                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
+
+        this.dispose();
+        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
         this.dispose();
     }//GEN-LAST:event_borrarVueloButtonActionPerformed
 
@@ -127,9 +165,9 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton borrarVueloButton;
     private javax.swing.JButton cancelarBorradoButton;
+    private javax.swing.JTextField idVueloTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField numeroDeVueloTextField;
     // End of variables declaration//GEN-END:variables
 }

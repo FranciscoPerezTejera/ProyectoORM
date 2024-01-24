@@ -16,7 +16,7 @@ import java.sql.Date;
 public class Vuelo {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column (name = "numero_vuelo")
     private int num_vuelo;
@@ -101,6 +101,11 @@ public class Vuelo {
 
     public void setMiembro(Miembro miembro) {
         this.miembro = miembro;
+    }
+
+    @Override
+    public String toString() {
+        return "Vuelo{" + "id=" + id + ", num_vuelo=" + num_vuelo + ", origen=" + origen + ", destino=" + destino + ", hora=" + hora + ", fecha=" + fecha + ", piloto=" + piloto + ", miembro=" + miembro + '}';
     }
     
     

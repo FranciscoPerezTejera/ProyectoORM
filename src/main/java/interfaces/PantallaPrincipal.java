@@ -30,6 +30,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.session = session;
         this.posibleError = posibleError;
         textArea.append(posibleError.toString());
+        textArea.append("\n------------------------------------------------\n");
         this.setVisible(true);
 
     }
@@ -238,48 +239,64 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             textArea.append("\n----------------------------------------------------\n");
 
         }*/
-        this.session.close();
         this.dispose();
     }//GEN-LAST:event_disconnectJMenuMouseClicked
 
     private void insercionDePersonaMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDePersonaMenuActionPerformed
         PantallaInsercionPersona nuevaPantallaInsercionPersona = new PantallaInsercionPersona(session);
+        this.dispose();
     }//GEN-LAST:event_insercionDePersonaMenuActionPerformed
 
     private void insercionDeVueloMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeVueloMenuActionPerformed
-        PantallaInsercionVuelo nuevaPantallaInsercionVuelo = new PantallaInsercionVuelo();
+        PantallaInsercionVuelo nuevaPantallaInsercionVuelo = new PantallaInsercionVuelo(session);
+        this.dispose();
+
     }//GEN-LAST:event_insercionDeVueloMenuActionPerformed
 
     private void insercionDeAvionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeAvionMenuActionPerformed
-        PantallaInsercionAvion nuevaPantallaInsercionAvion = new PantallaInsercionAvion();
+        PantallaInsercionAvion nuevaPantallaInsercionAvion = new PantallaInsercionAvion(session);
+        this.dispose();
+
     }//GEN-LAST:event_insercionDeAvionMenuActionPerformed
 
     private void borradoDePilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDePilotoActionPerformed
-        PantallaBorradoPiloto nuevaPantallaBorradoPiloto = new PantallaBorradoPiloto();
+        PantallaBorradoPiloto nuevaPantallaBorradoPiloto = new PantallaBorradoPiloto(session);
+        this.dispose();
+
     }//GEN-LAST:event_borradoDePilotoActionPerformed
 
     private void borradoDeMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeMiembroActionPerformed
-        PantallaBorradoMiembro nuevaPantallaBorradoMiembro = new PantallaBorradoMiembro();
+        PantallaBorradoMiembro nuevaPantallaBorradoMiembro = new PantallaBorradoMiembro(session);
+        this.dispose();
+
     }//GEN-LAST:event_borradoDeMiembroActionPerformed
 
     private void borradoDeVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeVueloActionPerformed
-        PantallaBorradoVuelo nuevaPantallaBorradoVuelo = new PantallaBorradoVuelo();
+        PantallaBorradoVuelo nuevaPantallaBorradoVuelo = new PantallaBorradoVuelo(session);
+        this.dispose();
     }//GEN-LAST:event_borradoDeVueloActionPerformed
 
     private void borradoDeAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoDeAvionActionPerformed
-        PantallaBorradoAvion nuevaPantallaBorradoAvion = new PantallaBorradoAvion();
+        PantallaBorradoAvion nuevaPantallaBorradoAvion = new PantallaBorradoAvion(session);
+        this.dispose();
     }//GEN-LAST:event_borradoDeAvionActionPerformed
 
     private void actualizarUnPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnPilotoActionPerformed
         PantallaActualizarPersona nuevaPantallaActualizarPersona = new PantallaActualizarPersona();
+        this.dispose();
+
     }//GEN-LAST:event_actualizarUnPilotoActionPerformed
 
     private void actualizarUnVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnVueloActionPerformed
         PantallaActualizarVuelo nuevaPantallaActualizarVuelo = new PantallaActualizarVuelo();
+        this.dispose();
+
     }//GEN-LAST:event_actualizarUnVueloActionPerformed
 
     private void actualizarUnAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnAvionActionPerformed
-        PantallaActualizarAvion nuevaPantallaActualizarAvion = new PantallaActualizarAvion();
+        PantallaActualizarAvion nuevaPantallaActualizarAvion = new PantallaActualizarAvion(session);
+        this.dispose();
+
     }//GEN-LAST:event_actualizarUnAvionActionPerformed
 
 
