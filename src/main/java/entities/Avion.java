@@ -48,7 +48,9 @@ public class Avion {
 
     @Override
     public String toString() {
-        return "Avion{" + "id=" + id + ", codigoAvion=" + codigoAvion + ", tipoAvion=" + tipoAvion + '}';
+        return "ID del avión = " + id
+                + " Código avión = " + codigoAvion
+                + " Tipo de avión = " + tipoAvion;
     }
     
     

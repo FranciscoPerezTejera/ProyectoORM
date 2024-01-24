@@ -105,9 +105,12 @@ public class Vuelo {
 
     @Override
     public String toString() {
-        return "Vuelo{" + "id=" + id + ", num_vuelo=" + num_vuelo + ", origen=" + origen + ", destino=" + destino + ", hora=" + hora + ", fecha=" + fecha + ", piloto=" + piloto + ", miembro=" + miembro + '}';
+        return " ID del miembro = " + id
+                + "\n Origen = " + origen
+                + "\n Destino = " + destino
+                + "\n Hora de vuelo = " + hora
+                + "\n Fecha de vuelo: " + fecha.toString()
+                + "\n ID del Piloto: " + this.getPiloto().getId()
+                + "\n ID del Miembro: " + this.getMiembro().getId();
     }
-    
-    
-    
 }

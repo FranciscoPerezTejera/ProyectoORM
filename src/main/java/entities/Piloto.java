@@ -69,7 +69,12 @@ public class Piloto extends Persona {
     public void setVuelos(Set<Vuelo> vuelos) {
         this.vuelos = vuelos;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return " ID del miembro = " + id 
+                + "\n Código = " + this.getCodigo() 
+                + "\n Nombre: " + this.getNombrePersona()
+                + "\n Vuelos: " + this.getVuelos();
+    }  
 }

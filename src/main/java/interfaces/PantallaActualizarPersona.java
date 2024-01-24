@@ -1,20 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package interfaces;
 
-/**
- *
- * @author 2damb
- */
+import entities.Avion;
+import entities.Miembro;
+import entities.Persona;
+import entities.Piloto;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 public class PantallaActualizarPersona extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PantallaActualizarPiloto
-     */
-    public PantallaActualizarPersona() {
+    private Session session;
+    private Piloto actualizarPiloto;
+    private Miembro actualizarMiembro;
+
+    public PantallaActualizarPersona(Session session) {
         initComponents();
+        this.session = session;
+        this.actualizarPiloto = null;
+        this.actualizarMiembro = null;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -31,18 +34,19 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        condigoPersonaTextField = new javax.swing.JTextField();
+        codigoPersonaTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         nombrePersonaTextfield = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        numeroDeVueloTextField = new javax.swing.JTextField();
         horasDeVueloJLabel = new javax.swing.JLabel();
         horasDeVueloPilotoTextField = new javax.swing.JTextField();
         cancelarInsercionJButton = new javax.swing.JButton();
         actualizarPersonaJButton = new javax.swing.JButton();
         tipoDePersonaJLabel = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        isMiembro = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        idPersonaTextField = new javax.swing.JTextField();
+        buscarIDPersonaButton = new javax.swing.JButton();
+        isPiloto = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,29 +58,19 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel2.setText("Codigo de persona:");
 
-        condigoPersonaTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        condigoPersonaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        codigoPersonaTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        codigoPersonaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        codigoPersonaTextField.setEnabled(false);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel3.setText("Nombre de la persona:");
-        jLabel3.setEnabled(false);
 
         nombrePersonaTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         nombrePersonaTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         nombrePersonaTextfield.setEnabled(false);
 
-        jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel4.setText("Número de vuelo:");
-        jLabel4.setEnabled(false);
-
-        numeroDeVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        numeroDeVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        numeroDeVueloTextField.setEnabled(false);
-        numeroDeVueloTextField.setMaximumSize(null);
-
         horasDeVueloJLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         horasDeVueloJLabel.setText("Horas de vuelo del piloto:");
-        horasDeVueloJLabel.setEnabled(false);
 
         horasDeVueloPilotoTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         horasDeVueloPilotoTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -103,9 +97,28 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         tipoDePersonaJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tipoDePersonaJLabel.setText("  ");
 
-        jCheckBox1.setText("ES UN PILOTO");
+        isMiembro.setText("ES UN MIEMBRO");
+        isMiembro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isMiembroActionPerformed(evt);
+            }
+        });
 
-        jCheckBox2.setText("ES UN MIEMBRO");
+        jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel5.setText("ID de persona:");
+
+        idPersonaTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        idPersonaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idPersonaTextField.setEnabled(false);
+
+        buscarIDPersonaButton.setText("BUSCAR");
+        buscarIDPersonaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarIDPersonaButtonActionPerformed(evt);
+            }
+        });
+
+        isPiloto.setText("ES UN PILOTO");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,30 +127,36 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(idPersonaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buscarIDPersonaButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(cancelarInsercionJButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(actualizarPersonaJButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(horasDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(horasDeVueloPilotoTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGap(17, 17, 17)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(39, 39, 39))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(nombrePersonaTextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-                            .addComponent(numeroDeVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(condigoPersonaTextField)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jCheckBox1)
+                            .addComponent(codigoPersonaTextField)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(isPiloto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBox2)))
+                        .addComponent(isMiembro)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tipoDePersonaJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
@@ -147,36 +166,36 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(tipoDePersonaJLabel)
-                        .addGap(21, 21, 21))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(139, 139, 139)
+                        .addComponent(tipoDePersonaJLabel))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(isPiloto)
+                            .addComponent(isMiembro))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(idPersonaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buscarIDPersonaButton))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jCheckBox2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(condigoPersonaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(codigoPersonaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(nombrePersonaTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(numeroDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(horasDeVueloPilotoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(horasDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelarInsercionJButton)
-                    .addComponent(actualizarPersonaJButton))
+                            .addComponent(horasDeVueloPilotoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(horasDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cancelarInsercionJButton)
+                            .addComponent(actualizarPersonaJButton))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -196,28 +215,125 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
 
     private void cancelarInsercionJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarInsercionJButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarInsercionJButtonActionPerformed
 
     private void actualizarPersonaJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarPersonaJButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("La inserción se realizo correctamente.\n");
+        Transaction transaction = null;
+
+        String codigoPersona = codigoPersonaTextField.getText();
+        String nombrePersona = nombrePersonaTextfield.getText();
+        String horasDeVuelo = horasDeVueloPilotoTextField.getText();
+
+        try {
+            if (!actualizarPiloto.equals(null)) {
+
+                actualizarPiloto.setCodigo(Integer.parseInt(codigoPersona));
+                actualizarPiloto.setNombrePersona(nombrePersona);
+                actualizarPiloto.setHoraDeVuelo(Integer.parseInt(horasDeVuelo));
+
+                transaction = session.beginTransaction();
+                session.merge(actualizarPiloto);
+                transaction.commit();
+
+            } else if (!actualizarMiembro.equals(null)) {
+
+                actualizarPiloto.setCodigo(Integer.parseInt(codigoPersona));
+                actualizarPiloto.setNombrePersona(nombrePersona);
+
+                transaction = session.beginTransaction();
+                session.merge(actualizarMiembro);
+                transaction.commit();
+
+            }
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            } else {
+                posibleError = new StringBuilder();
+                posibleError.append("El avión con ID " + idPersonaTextField.getText() + ", "
+                        + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
+                        + e.getMessage());
+            }
+        }
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_actualizarPersonaJButtonActionPerformed
+
+    private void buscarIDPersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarIDPersonaButtonActionPerformed
+
+        String idPersona = idPersonaTextField.getText();
+        Piloto pilotoComprobacion = null;
+        Miembro miembroComprobacion = null;
+
+        if (isPiloto.isSelected()) {
+            pilotoComprobacion = session.get(Piloto.class, idPersona);
+        } else if (isMiembro.isSelected()) {
+            miembroComprobacion = session.get(Miembro.class, idPersona);
+        }
+
+        try {
+
+            if (pilotoComprobacion.equals(null) && miembroComprobacion.equals(null)) {
+                throw new Exception();
+            } else if (isMiembro.isSelected()) {
+
+                idPersonaTextField.setEnabled(true);
+                codigoPersonaTextField.setEnabled(true);
+                nombrePersonaTextfield.setEnabled(true);
+                horasDeVueloPilotoTextField.setEnabled(true);
+                codigoPersonaTextField.setText(String.valueOf(pilotoComprobacion.getCodigo()));
+                nombrePersonaTextfield.setText(pilotoComprobacion.getNombrePersona());
+                horasDeVueloPilotoTextField.setText(String.valueOf(pilotoComprobacion.getHoraDeVuelo()));
+                actualizarPiloto = pilotoComprobacion;
+
+            } else {
+
+                idPersonaTextField.setEnabled(true);
+                codigoPersonaTextField.setEnabled(true);
+                nombrePersonaTextfield.setEnabled(true);
+                codigoPersonaTextField.setText(String.valueOf(miembroComprobacion.getCodigo()));
+                nombrePersonaTextfield.setText(miembroComprobacion.getNombrePersona());
+                actualizarMiembro = miembroComprobacion;
+
+            }
+
+        } catch (Exception e) {
+
+            //Lanzar un panel que te diga que ese avion no existe en la base de datos
+        }
+
+    }//GEN-LAST:event_buscarIDPersonaButtonActionPerformed
+
+    private void isMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isMiembroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_isMiembroActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizarPersonaJButton;
+    private javax.swing.JButton buscarIDPersonaButton;
     private javax.swing.JButton cancelarInsercionJButton;
-    private javax.swing.JTextField condigoPersonaTextField;
+    private javax.swing.JTextField codigoPersonaTextField;
     private javax.swing.JLabel horasDeVueloJLabel;
     private javax.swing.JTextField horasDeVueloPilotoTextField;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JTextField idPersonaTextField;
+    private javax.swing.JCheckBox isMiembro;
+    private javax.swing.JCheckBox isPiloto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField nombrePersonaTextfield;
-    private javax.swing.JTextField numeroDeVueloTextField;
     private javax.swing.JLabel tipoDePersonaJLabel;
     // End of variables declaration//GEN-END:variables
 }

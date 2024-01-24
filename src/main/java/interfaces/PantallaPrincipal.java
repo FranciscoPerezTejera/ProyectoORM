@@ -1,12 +1,14 @@
 package interfaces;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import entities.Avion;
+import entities.Miembro;
+import entities.Piloto;
+import entities.Vuelo;
+import java.util.Iterator;
+import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class PantallaPrincipal extends javax.swing.JFrame {
 
@@ -57,29 +59,37 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         actualizarUnPiloto = new javax.swing.JMenuItem();
         actualizarUnVuelo = new javax.swing.JMenuItem();
         actualizarUnAvion = new javax.swing.JMenuItem();
+        consultaDeDatos = new javax.swing.JMenu();
+        consultaTablaPiloto = new javax.swing.JMenuItem();
+        consultaTablaMiembro = new javax.swing.JMenuItem();
+        consultaTablaVuelo = new javax.swing.JMenuItem();
+        consultaTablaAvion = new javax.swing.JMenuItem();
         disconnectJMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("PRÁCTICA JDBC ACCESO A DATOS");
+        jLabel1.setText("HIBERNATE ACCESO A DATOS");
 
         textArea.setEditable(false);
         textArea.setColumns(20);
-        textArea.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        textArea.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         textArea.setLineWrap(true);
         textArea.setRows(5);
+        textArea.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        textArea.setFocusable(false);
         jScrollPane1.setViewportView(textArea);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -200,6 +210,42 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(actualizarDatos);
 
+        consultaDeDatos.setText("CONSULTA DE DATOS");
+
+        consultaTablaPiloto.setText("Consultar tabla Piloto");
+        consultaTablaPiloto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaTablaPilotoActionPerformed(evt);
+            }
+        });
+        consultaDeDatos.add(consultaTablaPiloto);
+
+        consultaTablaMiembro.setText("Consultar tabla Miembro");
+        consultaTablaMiembro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaTablaMiembroActionPerformed(evt);
+            }
+        });
+        consultaDeDatos.add(consultaTablaMiembro);
+
+        consultaTablaVuelo.setText("Consultar tabla Vuelo");
+        consultaTablaVuelo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaTablaVueloActionPerformed(evt);
+            }
+        });
+        consultaDeDatos.add(consultaTablaVuelo);
+
+        consultaTablaAvion.setText("Consultar tabloa Avión");
+        consultaTablaAvion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultaTablaAvionActionPerformed(evt);
+            }
+        });
+        consultaDeDatos.add(consultaTablaAvion);
+
+        jMenuBar1.add(consultaDeDatos);
+
         disconnectJMenu.setText("SALIR");
         disconnectJMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         disconnectJMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -282,7 +328,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_borradoDeAvionActionPerformed
 
     private void actualizarUnPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnPilotoActionPerformed
-        PantallaActualizarPersona nuevaPantallaActualizarPersona = new PantallaActualizarPersona();
+        PantallaActualizarPersona nuevaPantallaActualizarPersona = new PantallaActualizarPersona(session);
         this.dispose();
 
     }//GEN-LAST:event_actualizarUnPilotoActionPerformed
@@ -299,6 +345,123 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_actualizarUnAvionActionPerformed
 
+    private void consultaTablaPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaPilotoActionPerformed
+
+        Transaction transaction = null;
+
+        try {
+            textArea.append("CONSULTA DE PILOTOS\n");
+            textArea.append("=====================================\n");
+            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            transaction = session.beginTransaction();
+            List pilotos = session.createQuery("FROM Piloto").list();
+            for (Iterator it = pilotos.iterator(); it.hasNext();) {
+                Piloto piloto = (Piloto) it.next();
+                textArea.append(piloto.toString());
+                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            }
+            textArea.append("=====================================\n");
+            transaction.commit();
+        } catch (HibernateException e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            }
+        }
+    }//GEN-LAST:event_consultaTablaPilotoActionPerformed
+
+    private void consultaTablaMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaMiembroActionPerformed
+
+        Transaction transaction = null;
+
+        try {
+            textArea.append("CONSULTA DE MIEMBROS\n");
+            textArea.append("=====================================\n");
+            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            transaction = session.beginTransaction();
+            List miembros = session.createQuery("FROM Miembro").list();
+            for (Iterator it = miembros.iterator(); it.hasNext();) {
+                Miembro miembro = (Miembro) it.next();
+                textArea.append(miembro.toString());
+                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+
+            }
+            textArea.append("=====================================\n");
+            transaction.commit();
+        } catch (HibernateException e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            }
+        }
+    }//GEN-LAST:event_consultaTablaMiembroActionPerformed
+
+    private void consultaTablaVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaVueloActionPerformed
+
+        Transaction transaction = null;
+
+        try {
+            textArea.append("CONSULTA DE VUELOS\n");
+            textArea.append("=====================================\n");
+            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            transaction = session.beginTransaction();
+            List vuelos = session.createQuery("FROM Vuelo").list();
+            for (Iterator it = vuelos.iterator(); it.hasNext();) {
+                Vuelo vuelo = (Vuelo) it.next();
+                textArea.append(vuelo.toString());
+                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            }
+            textArea.append("=====================================\n");
+            transaction.commit();
+        } catch (HibernateException e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            }
+        }
+    }//GEN-LAST:event_consultaTablaVueloActionPerformed
+
+    private void consultaTablaAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaAvionActionPerformed
+
+        Transaction transaction = null;
+
+        try {
+            textArea.append("CONSULTA DE AVIONES\n");
+            textArea.append("=====================================\n");
+            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            transaction = session.beginTransaction();
+            List aviones = session.createQuery("FROM Avion").list();
+            for (Iterator it = aviones.iterator(); it.hasNext();) {
+                Avion avion = (Avion) it.next();
+                textArea.append(avion.toString());
+                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+            }
+            textArea.append("=====================================\n");
+            transaction.commit();
+        } catch (HibernateException e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder();
+                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                        + e.getMessage());
+
+            }
+        }
+    }//GEN-LAST:event_consultaTablaAvionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu actualizarDatos;
@@ -310,6 +473,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem borradoDeMiembro;
     private javax.swing.JMenuItem borradoDePiloto;
     private javax.swing.JMenuItem borradoDeVuelo;
+    private javax.swing.JMenu consultaDeDatos;
+    private javax.swing.JMenuItem consultaTablaAvion;
+    private javax.swing.JMenuItem consultaTablaMiembro;
+    private javax.swing.JMenuItem consultaTablaPiloto;
+    private javax.swing.JMenuItem consultaTablaVuelo;
     private javax.swing.JMenu disconnectJMenu;
     private javax.swing.JMenu insercionDato;
     private javax.swing.JMenuItem insercionDeAvionMenu;

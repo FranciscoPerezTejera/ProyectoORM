@@ -184,6 +184,7 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
             transaction = session.beginTransaction();
             session.merge(avionActualizado);
             transaction.commit();
+            
 
         } catch (Exception e) {
 
