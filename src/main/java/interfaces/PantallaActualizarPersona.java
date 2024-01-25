@@ -130,11 +130,6 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         tipoDePersonaJLabel.setText("  ");
 
         isMiembro.setText("ES UN MIEMBRO");
-        isMiembro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                isMiembroActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel5.setText("ID de persona:");
@@ -267,7 +262,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
 
                 session.createQuery("UPDATE Piloto SET codigo = :codigo, "
                         + "nombrePersona = :nombrePersona, "
-                        + "horaDeVuelo = :horaDeVuelo WHERE id = :idPersona")
+                        + "horaDeVuelo = :horaDeVuelo WHERE id = :idPersona", Piloto.class)
                         .setParameter("codigo", codigoPersona)
                         .setParameter("nombrePersona", nombrePersona)
                         .setParameter("horaDeVuelo", Integer.parseInt(horasDeVuelo))
@@ -277,7 +272,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
             } else if (actualizarMiembro != null) {
 
                 session.createQuery("UPDATE Miembro SET codigo = :codigo, "
-                        + "nombrePersona = :nombrePersona WHERE id = :idPersona")
+                        + "nombrePersona = :nombrePersona WHERE id = :idPersona", Miembro.class)
                         .setParameter("codigo", codigoPersona)
                         .setParameter("nombrePersona", nombrePersona)
                         .setParameter("idPersona", idPersona)
@@ -354,10 +349,6 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_buscarIDPersonaButtonActionPerformed
-
-    private void isMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isMiembroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_isMiembroActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

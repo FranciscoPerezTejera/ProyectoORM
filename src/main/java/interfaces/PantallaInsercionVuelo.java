@@ -333,7 +333,7 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         nuevoVuelo.setHora(horaDeVuelo);
         nuevoVuelo.setFecha(fechaDeVuelo);
         nuevoVuelo.setPiloto(pilotoDelVuelo(comboBoxPiloto.getSelectedItem().toString()));
-        nuevoVuelo.setMiembro(miembroDelVuelo(comboBoxPiloto.getSelectedItem().toString()));
+        nuevoVuelo.setMiembro(miembroDelVuelo(comboBoxMiembro.getSelectedItem().toString()));
         nuevoVuelo.setAvion(avionDelVuelo(comboBoxAvion.getSelectedItem().toString()));
         
         try {
@@ -346,7 +346,7 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
             if (transaction != null) {
                 transaction.rollback();
                 posibleError = new StringBuilder("ERROR a crear el vuelo...\n"
-                        + "el avión solo puede estar asignado a un vuelo."
+                        + "el avión solo puede estar asignado a más de un vuelo."
                         + e.getMessage());
             }
             e.printStackTrace();

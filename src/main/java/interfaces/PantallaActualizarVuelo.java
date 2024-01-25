@@ -4,6 +4,7 @@ import entities.Avion;
 import entities.Miembro;
 import entities.Piloto;
 import entities.Vuelo;
+import java.sql.Date;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -47,6 +48,19 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                 horadeDeVueloJLabel.setText(horaFormateada);
             }
         });
+
+        /* for (Integer piloto : listaDePilotos) {
+            comboBoxPiloto.addItem(piloto.toString());
+        }
+
+        for (Integer miembro : listaDeMiembros) {
+            comboBoxMiembro.addItem(miembro.toString());
+
+        }
+        
+        for (Integer avion : listaDeAviones) {
+            comboBoxAvion.addItem(avion.toString()); 
+        }*/
     }
 
     /**
@@ -70,12 +84,12 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         horarioJslider = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
         cancelarInsercionVueloButton = new javax.swing.JButton();
-        insertarNuevoVueloButton = new javax.swing.JButton();
+        actualizarVueloButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        pilotoDelVueloJCheckBox = new javax.swing.JComboBox<>();
+        comboBoxPiloto = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        miembroDelVueloJCheckBox = new javax.swing.JComboBox<>();
+        comboBoxMiembro = new javax.swing.JComboBox<>();
         idDelVuelo = new javax.swing.JLabel();
         idDeVueloTextField = new javax.swing.JTextField();
         buscarIDVueloButton = new javax.swing.JButton();
@@ -85,6 +99,8 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         mesTextField = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         diaTextField = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        comboBoxAvion = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,11 +145,11 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
             }
         });
 
-        insertarNuevoVueloButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        insertarNuevoVueloButton.setText("INSERTAR");
-        insertarNuevoVueloButton.addActionListener(new java.awt.event.ActionListener() {
+        actualizarVueloButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        actualizarVueloButton.setText("ACTUALIZAR");
+        actualizarVueloButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                insertarNuevoVueloButtonActionPerformed(evt);
+                actualizarVueloButtonActionPerformed(evt);
             }
         });
 
@@ -145,17 +161,15 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Piloto del vuelo:");
 
-        pilotoDelVueloJCheckBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        pilotoDelVueloJCheckBox.setEnabled(false);
+        comboBoxPiloto.setEnabled(false);
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Miembro del vuelo:");
 
-        miembroDelVueloJCheckBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        miembroDelVueloJCheckBox.setEnabled(false);
+        comboBoxMiembro.setEnabled(false);
 
         idDelVuelo.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        idDelVuelo.setText("Numero de vuelo:");
+        idDelVuelo.setText("ID de vuelo:");
 
         idDeVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         idDeVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -185,6 +199,11 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         diaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         diaTextField.setMaximumSize(null);
 
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel12.setText("Avión del vuelo:");
+
+        comboBoxAvion.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -194,61 +213,68 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addGap(17, 17, 17)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(origenDelVueloTextField)
-                                    .addComponent(numeroDeVueloTextfield)
-                                    .addComponent(horarioJslider, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(cancelarInsercionVueloButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(insertarNuevoVueloButton))
+                                .addComponent(actualizarVueloButton))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(horarioJslider, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel4)
+                                            .addGap(56, 56, 56))
+                                        .addComponent(jLabel9))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(idDelVuelo))
+                                        .addGap(11, 11, 11)))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(miembroDelVueloJCheckBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(pilotoDelVueloJCheckBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(numeroDeVueloTextfield)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(idDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(buscarIDVueloButton))
+                                            .addComponent(origenDelVueloTextField)
+                                            .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(4, 4, 4))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel10)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jLabel11)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(comboBoxPiloto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(comboBoxMiembro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(idDelVuelo)
+                                .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(idDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(buscarIDVueloButton))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(comboBoxAvion, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(24, 24, 24)))
                 .addContainerGap())
         );
@@ -257,50 +283,54 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idDelVuelo)
-                    .addComponent(idDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buscarIDVueloButton))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(numeroDeVueloTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(idDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buscarIDVueloButton)
+                    .addComponent(idDelVuelo))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numeroDeVueloTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(origenDelVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(horarioJslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
+                    .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(horarioJslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
+                    .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel11))
+                    .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pilotoDelVueloJCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(miembroDelVueloJCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxPiloto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelarInsercionVueloButton)
-                    .addComponent(insertarNuevoVueloButton))
-                .addGap(30, 30, 30))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxAvion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(actualizarVueloButton)
+                    .addComponent(cancelarInsercionVueloButton))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -322,10 +352,45 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarInsercionVueloButtonActionPerformed
 
-    private void insertarNuevoVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarNuevoVueloButtonActionPerformed
+    private void actualizarVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarVueloButtonActionPerformed
+
+        StringBuilder posibleError = new StringBuilder("La actualización se realizó correctamente.\n");
+        Transaction transaction = null;
+        String numeroDeVuelo = numeroDeVueloTextfield.getText();
+        String origenDeVuelo = origenDelVueloTextField.getText();
+        String destinoDeVuelo = destinoDelVueloTextField.getText();
+        String horaDeVuelo = horadeDeVueloJLabel.getText();
+        String anioFecha = anioTextField.getText();
+        String mesFecha = mesTextField.getText();
+        String diaFecha = diaTextField.getText();
+        Date fechaDeVuelo = Date.valueOf(formateoDeFecha(anioFecha, mesFecha, diaFecha));
+
+        actualizarVuelo = new Vuelo();
+        actualizarVuelo.setNum_vuelo(Integer.parseInt(numeroDeVuelo));
+        actualizarVuelo.setOrigen(origenDeVuelo);
+        actualizarVuelo.setDestino(destinoDeVuelo);
+        actualizarVuelo.setHora(horaDeVuelo);
+        actualizarVuelo.setFecha(fechaDeVuelo);
+
+        try {
+
+            transaction = session.beginTransaction();
+            session.merge(actualizarVuelo);
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            if (transaction != null) {
+                transaction.rollback();
+                posibleError = new StringBuilder("ERROR a crear el vuelo...\n"
+                        + "el avión solo puede estar asignado a más de un vuelo."
+                        + e.getMessage());
+            }
+            e.printStackTrace();
+        }
         this.dispose();
-        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
-    }//GEN-LAST:event_insertarNuevoVueloButtonActionPerformed
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
+    }//GEN-LAST:event_actualizarVueloButtonActionPerformed
 
     private void buscarIDVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarIDVueloButtonActionPerformed
 
@@ -333,7 +398,8 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         Vuelo vueloComprobacion = null;
 
         vueloComprobacion = session.get(Vuelo.class, idVuelo);
-
+        System.out.println(vueloComprobacion);
+        
         String anio;
         String mes;
         String dia;
@@ -342,8 +408,6 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         anio = String.valueOf(calendar.get(Calendar.YEAR));
         mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         dia = String.valueOf(calendar.get(Calendar.DATE));
-
-        System.out.println(vueloComprobacion);
 
         try {
 
@@ -366,7 +430,8 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                 mesTextField.setText(mes);
                 diaTextField.setText(dia);
                 horarioJslider.setValue(Integer.parseInt(vueloComprobacion.getHora()));
-
+                actualizarVuelo = vueloComprobacion;
+                
             } else {
 
                 throw new Exception();
@@ -441,19 +506,23 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actualizarVueloButton;
     private javax.swing.JTextField anioTextField;
     private javax.swing.JButton buscarIDVueloButton;
     private javax.swing.JButton cancelarInsercionVueloButton;
+    private javax.swing.JComboBox<String> comboBoxAvion;
+    private javax.swing.JComboBox<String> comboBoxMiembro;
+    private javax.swing.JComboBox<String> comboBoxPiloto;
     private javax.swing.JTextField destinoDelVueloTextField;
     private javax.swing.JTextField diaTextField;
     private javax.swing.JLabel horadeDeVueloJLabel;
     private javax.swing.JSlider horarioJslider;
     private javax.swing.JTextField idDeVueloTextField;
     private javax.swing.JLabel idDelVuelo;
-    private javax.swing.JButton insertarNuevoVueloButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -464,9 +533,7 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField mesTextField;
-    private javax.swing.JComboBox<String> miembroDelVueloJCheckBox;
     private javax.swing.JTextField numeroDeVueloTextfield;
     private javax.swing.JTextField origenDelVueloTextField;
-    private javax.swing.JComboBox<String> pilotoDelVueloJCheckBox;
     // End of variables declaration//GEN-END:variables
 }

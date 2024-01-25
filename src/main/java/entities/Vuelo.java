@@ -126,6 +126,7 @@ public class Vuelo {
                 + "\n Hora de vuelo = " + hora
                 + "\n Fecha de vuelo = " + fecha.toString()
                 + "\n ID del Piloto = " + this.getPiloto().getId()
-                + "\n ID del Miembro = " + this.getMiembro().getId();
+                + "\n ID del Miembro = " + this.getMiembro().getId()
+                + "\n ID del Avión = " + this.getAvion().getId();
     }
 }

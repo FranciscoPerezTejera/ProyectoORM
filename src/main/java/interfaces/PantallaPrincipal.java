@@ -6,13 +6,13 @@ import entities.Piloto;
 import entities.Vuelo;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaPrincipal extends javax.swing.JFrame {
-
-    //Connection connection;
+    
     private Session session;
     StringBuilder posibleError;
 
@@ -32,7 +32,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.session = session;
         this.posibleError = posibleError;
         textArea.append(posibleError.toString());
-        textArea.append("\n------------------------------------------------\n");
+        textArea.append("------------------------------------------------\n");
         this.setVisible(true);
 
     }
@@ -45,6 +45,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaDeDatos = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         insercionDato = new javax.swing.JMenu();
         insercionDePersonaMenu = new javax.swing.JMenuItem();
@@ -81,6 +83,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         textArea.setFocusable(false);
         jScrollPane1.setViewportView(textArea);
 
+        tablaDeDatos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaDeDatos);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -88,8 +103,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -98,8 +114,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 .addGap(47, 47, 47)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
         );
 
         jMenuBar1.setBackground(new java.awt.Color(0, 153, 255));
@@ -335,118 +353,74 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void consultaTablaPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaPilotoActionPerformed
 
-        Transaction transaction = null;
-        try {
-            textArea.append("CONSULTA DE PILOTOS\n");
-            textArea.append("=====================================\n");
-            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            transaction = session.beginTransaction();
-            List pilotos = session.createQuery("FROM Piloto").list();
-            for (Iterator it = pilotos.iterator(); it.hasNext();) {
-                Piloto piloto = (Piloto) it.next();
-                textArea.append(piloto.toString());
-                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            }
-            textArea.append("=====================================\n");
-            transaction.commit();
-        } catch (HibernateException e) {
+        List<Piloto> listaPilotos = listadePilotos();
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+        //"ID", "Código", "Nombre", "Horas de Vuelo"
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("CÓDIGO");
+        tableModel.addColumn("NOMBRE");
+        tableModel.addColumn("HORAS_DE_VUELO");
 
-            }
-        }
+        listaPilotos.forEach(e -> {
+            tableModel.addRow(new Object[]{e.getId(), e.getCodigo(), e.getNombrePersona(), e.getHoraDeVuelo()});
+        });
+
+        tablaDeDatos.setModel(tableModel);
     }//GEN-LAST:event_consultaTablaPilotoActionPerformed
 
     private void consultaTablaMiembroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaMiembroActionPerformed
 
-        Transaction transaction = null;
+        List<Miembro> listaMiembro = listadeMiembros();
 
-        try {
-            textArea.append("CONSULTA DE MIEMBROS\n");
-            textArea.append("=====================================\n");
-            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            transaction = session.beginTransaction();
-            List miembros = session.createQuery("FROM Miembro").list();
-            for (Iterator it = miembros.iterator(); it.hasNext();) {
-                Miembro miembro = (Miembro) it.next();
-                textArea.append(miembro.toString());
-                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
+        //"ID", "Código", "Nombre"
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("CÓDIGO");
+        tableModel.addColumn("NOMBRE");
 
-            }
-            textArea.append("=====================================\n");
-            transaction.commit();
-        } catch (HibernateException e) {
+        listaMiembro.forEach(e -> {
+            tableModel.addRow(new Object[]{e.getId(), e.getCodigo(), e.getNombrePersona()});
+        });
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
-
-            }
-        }
+        tablaDeDatos.setModel(tableModel);
     }//GEN-LAST:event_consultaTablaMiembroActionPerformed
 
     private void consultaTablaVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaVueloActionPerformed
 
-        Transaction transaction = null;
+         List<Vuelo> listaVuelos = listadeVuelos();
 
-        try {
-            textArea.append("CONSULTA DE VUELOS\n");
-            textArea.append("=====================================\n");
-            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            transaction = session.beginTransaction();
-            List vuelos = session.createQuery("FROM Vuelo").list();
-            for (Iterator it = vuelos.iterator(); it.hasNext();) {
-                Vuelo vuelo = (Vuelo) it.next();
-                textArea.append(vuelo.toString());
-                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            }
-            textArea.append("=====================================\n");
-            transaction.commit();
-        } catch (HibernateException e) {
+        //"ID", "Numero_Vuelo", "Origen, Destino, Hora, Fecha, Piloto, Miembro, Avión
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("NÚMERO_VUELO");
+        tableModel.addColumn("ORIGEN");
+        tableModel.addColumn("DESTINO");
+        tableModel.addColumn("HORA");
+        tableModel.addColumn("FECHA");
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+        listaVuelos.forEach(e -> {
+            tableModel.addRow(new Object[]{e.getId(), e.getNum_vuelo(), e.getOrigen(), e.getDestino(), e.getHora(), e.getFecha().toString()});
+        });
 
-            }
-        }
+        tablaDeDatos.setModel(tableModel);
     }//GEN-LAST:event_consultaTablaVueloActionPerformed
 
     private void consultaTablaAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaAvionActionPerformed
 
-        Transaction transaction = null;
+         List<Avion> listaAviones = listadeAviones();
 
-        try {
-            textArea.append("CONSULTA DE AVIONES\n");
-            textArea.append("=====================================\n");
-            textArea.append("-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            transaction = session.beginTransaction();
-            List aviones = session.createQuery("FROM Avion").list();
-            for (Iterator it = aviones.iterator(); it.hasNext();) {
-                Avion avion = (Avion) it.next();
-                textArea.append(avion.toString());
-                textArea.append("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n");
-            }
-            textArea.append("=====================================\n");
-            transaction.commit();
-        } catch (HibernateException e) {
+        //"ID", "Código_Avion", "Tipo_Avion"
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("CÓDIGO_AVIÓN");
+        tableModel.addColumn("TIPO_AVIÓN");
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+        listaAviones.forEach(e -> {
+            tableModel.addRow(new Object[]{e.getId(), e.getCodigoAvion(), e.getTipoAvion()});
+        });
 
-            }
-        }
+        tablaDeDatos.setModel(tableModel);
     }//GEN-LAST:event_consultaTablaAvionActionPerformed
 
 
@@ -474,6 +448,47 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tablaDeDatos;
     private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
+
+    private List<Piloto> listadePilotos() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List vuelos = session.createQuery("FROM Piloto", Piloto.class).list();
+        transaction.commit();
+        return vuelos;
+
+    }
+
+    private List<Miembro> listadeMiembros() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List vuelos = session.createQuery("FROM Miembro", Miembro.class).list();
+        transaction.commit();
+        return vuelos;
+
+    }
+
+    private List<Vuelo> listadeVuelos() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List vuelos = session.createQuery("FROM Vuelo", Vuelo.class).list();
+        transaction.commit();
+        return vuelos;
+        
+    }
+
+    private List<Avion> listadeAviones() {
+        
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List aviones = session.createQuery("FROM Avion", Vuelo.class).list();
+        transaction.commit();
+        return aviones;
+    }
 }
