@@ -1,12 +1,25 @@
 package interfaces;
 
+import entities.Avion;
+import entities.Miembro;
+import entities.Piloto;
 import entities.Vuelo;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class PantallaActualizarVuelo extends javax.swing.JFrame {
 
     private Session session;
     private Vuelo actualizarVuelo;
+    private List<Integer> listaDePilotos;
+    private List<Integer> listaDeMiembros;
+    private List<Integer> listaDeAviones;
 
     public PantallaActualizarVuelo(Session session) {
         initComponents();
@@ -14,6 +27,26 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         this.actualizarVuelo = null;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        listaDePilotos = listaDePilotos();
+        listaDeMiembros = listaDeMiembros();
+        listaDeAviones = listaDeAviones();
+
+        horadeDeVueloJLabel.setText("00:00");
+
+        horarioJslider.setMinimum(0);
+        horarioJslider.setMaximum(1439);
+        horarioJslider.setValue(0);
+
+        horarioJslider.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+                int minutos = horarioJslider.getValue();
+                float horas = minutos / 60.0f;
+                String horaFormateada = formatarHora(horas);
+                horadeDeVueloJLabel.setText(horaFormateada);
+            }
+        });
     }
 
     /**
@@ -34,8 +67,7 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         destinoDelVueloTextField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         horadeDeVueloJLabel = new javax.swing.JLabel();
-        sliderHoras = new javax.swing.JSlider();
-        fechaDelVueloTextField = new javax.swing.JTextField();
+        horarioJslider = new javax.swing.JSlider();
         jLabel6 = new javax.swing.JLabel();
         cancelarInsercionVueloButton = new javax.swing.JButton();
         insertarNuevoVueloButton = new javax.swing.JButton();
@@ -47,6 +79,12 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         idDelVuelo = new javax.swing.JLabel();
         idDeVueloTextField = new javax.swing.JTextField();
         buscarIDVueloButton = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        anioTextField = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        mesTextField = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        diaTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,12 +116,7 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         horadeDeVueloJLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         horadeDeVueloJLabel.setText("   ");
 
-        sliderHoras.setEnabled(false);
-
-        fechaDelVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        fechaDelVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fechaDelVueloTextField.setEnabled(false);
-        fechaDelVueloTextField.setMaximumSize(null);
+        horarioJslider.setEnabled(false);
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel6.setText("Fecha del vuelo:");
@@ -134,6 +167,24 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setText("AÑO");
+
+        anioTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        anioTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        anioTextField.setMaximumSize(null);
+
+        jLabel10.setText("MES");
+
+        mesTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        mesTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        mesTextField.setMaximumSize(null);
+
+        jLabel11.setText("DÍA");
+
+        diaTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        diaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        diaTextField.setMaximumSize(null);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -150,7 +201,6 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -163,11 +213,10 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(17, 17, 17)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(origenDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                    .addComponent(origenDelVueloTextField)
                                     .addComponent(numeroDeVueloTextfield)
-                                    .addComponent(sliderHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(fechaDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(horarioJslider, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                                    .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(cancelarInsercionVueloButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -185,7 +234,21 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(idDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(buscarIDVueloButton)))
+                                .addComponent(buscarIDVueloButton))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(24, 24, 24)))
                 .addContainerGap())
         );
@@ -214,13 +277,18 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(sliderHoras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(horarioJslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fechaDelVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pilotoDelVueloJCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -251,10 +319,12 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
 
     private void cancelarInsercionVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarInsercionVueloButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_cancelarInsercionVueloButtonActionPerformed
 
     private void insertarNuevoVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarNuevoVueloButtonActionPerformed
         this.dispose();
+        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session);
     }//GEN-LAST:event_insertarNuevoVueloButtonActionPerformed
 
     private void buscarIDVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarIDVueloButtonActionPerformed
@@ -263,6 +333,15 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         Vuelo vueloComprobacion = null;
 
         vueloComprobacion = session.get(Vuelo.class, idVuelo);
+
+        String anio;
+        String mes;
+        String dia;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(vueloComprobacion.getFecha());
+        anio = String.valueOf(calendar.get(Calendar.YEAR));
+        mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        dia = String.valueOf(calendar.get(Calendar.DATE));
 
         System.out.println(vueloComprobacion);
 
@@ -274,15 +353,19 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                 origenDelVueloTextField.setEnabled(true);
                 destinoDelVueloTextField.setEnabled(true);
                 horadeDeVueloJLabel.setEnabled(true);
-                fechaDelVueloTextField.setEnabled(true);
-                sliderHoras.setEnabled(true);
+                anioTextField.setEnabled(true);
+                mesTextField.setEnabled(true);
+                diaTextField.setEnabled(true);
+                horarioJslider.setEnabled(true);
 
                 numeroDeVueloTextfield.setText(String.valueOf(vueloComprobacion.getNum_vuelo()));
                 origenDelVueloTextField.setText(vueloComprobacion.getOrigen());
                 destinoDelVueloTextField.setText(vueloComprobacion.getDestino());
                 horadeDeVueloJLabel.setText(String.valueOf(vueloComprobacion.getHora()));
-                fechaDelVueloTextField.setText(vueloComprobacion.getFecha().toString());
-                sliderHoras.setValue(Integer.parseInt(vueloComprobacion.getHora()));
+                anioTextField.setText(anio);
+                mesTextField.setText(mes);
+                diaTextField.setText(dia);
+                horarioJslider.setValue(Integer.parseInt(vueloComprobacion.getHora()));
 
             } else {
 
@@ -296,17 +379,81 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_buscarIDVueloButtonActionPerformed
 
+    private String formatarHora(float horas) {
+        int horasEnteras = (int) horas;
+        int minutos = (int) ((horas - horasEnteras) * 60);
+        DecimalFormat formatoHora = new DecimalFormat("00");
+        return formatoHora.format(horasEnteras) + ":" + formatoHora.format(minutos);
+    }
+
+    private LocalDate formateoDeFecha(String anioFecha, String mesFecha, String diaFecha) {
+
+        return LocalDate.of(
+                Integer.parseInt(anioFecha),
+                Integer.parseInt(mesFecha),
+                Integer.parseInt(diaFecha));
+
+    }
+
+    private List<Integer> listaDePilotos() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List<Integer> lista = session.createQuery("SELECT id FROM Piloto", Integer.class
+        ).getResultList();
+        transaction.commit();
+        return lista;
+    }
+
+    private List<Integer> listaDeMiembros() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List<Integer> lista = session.createQuery("SELECT id FROM Miembro", Integer.class
+        ).getResultList();
+        transaction.commit();
+        return lista;
+    }
+
+    private List<Integer> listaDeAviones() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List<Integer> lista = session.createQuery("SELECT id FROM Avion", Integer.class
+        ).getResultList();
+        transaction.commit();
+        return lista;
+    }
+
+    private Piloto pilotoDelVuelo(String idPiloto) {
+        Piloto piloto = session.get(Piloto.class, idPiloto);
+        return piloto;
+    }
+
+    private Miembro miembroDelVuelo(String idMiembro) {
+        Miembro miembro = session.get(Miembro.class, idMiembro);
+        return miembro;
+    }
+
+    private Avion avionDelVuelo(String idAvion) {
+        Avion avion = session.get(Avion.class, idAvion);
+        return avion;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField anioTextField;
     private javax.swing.JButton buscarIDVueloButton;
     private javax.swing.JButton cancelarInsercionVueloButton;
     private javax.swing.JTextField destinoDelVueloTextField;
-    private javax.swing.JTextField fechaDelVueloTextField;
+    private javax.swing.JTextField diaTextField;
     private javax.swing.JLabel horadeDeVueloJLabel;
+    private javax.swing.JSlider horarioJslider;
     private javax.swing.JTextField idDeVueloTextField;
     private javax.swing.JLabel idDelVuelo;
     private javax.swing.JButton insertarNuevoVueloButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -314,11 +461,12 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField mesTextField;
     private javax.swing.JComboBox<String> miembroDelVueloJCheckBox;
     private javax.swing.JTextField numeroDeVueloTextfield;
     private javax.swing.JTextField origenDelVueloTextField;
     private javax.swing.JComboBox<String> pilotoDelVueloJCheckBox;
-    private javax.swing.JSlider sliderHoras;
     // End of variables declaration//GEN-END:variables
 }
