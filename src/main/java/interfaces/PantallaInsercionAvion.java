@@ -141,13 +141,17 @@ public class PantallaInsercionAvion extends javax.swing.JFrame {
         String tipoAvion = tipoDeAvionTextField.getText();
         Avion nuevoAvion = new Avion();
 
-        nuevoAvion.setCodigoAvion(Integer.parseInt(codigoAvion));
+        nuevoAvion.setCodigoAvion(codigoAvion);
         nuevoAvion.setTipoAvion(tipoAvion);
 
         try {
             transaction = session.beginTransaction();
-            session.persist(nuevoAvion);
+            session.createQuery("INSERT INTO Avion (codigoAvion, tipoAvion) VALUES (:codigoAvion, :tipoAvion)")
+                    .setParameter("codigoAvion", nuevoAvion.getCodigoAvion())
+                    .setParameter("tipoAvion", nuevoAvion.getTipoAvion())
+                    .executeUpdate();
             transaction.commit();
+            
             posibleError.append("El avión con codigo " + nuevoAvion.getCodigoAvion()
                     + " y tipo " + nuevoAvion.getTipoAvion()
                     + " ha sido insertado con éxito.");

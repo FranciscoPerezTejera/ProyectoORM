@@ -1,6 +1,7 @@
 package entities;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.sql.Date;
 
@@ -28,12 +30,15 @@ public class Vuelo {
     private String hora;
     @Column (name = "fecha_vuelo")
     private Date fecha;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "id_piloto")
     private Piloto piloto;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "id_miembro")
     private Miembro miembro;
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "id_avion")
+    private Avion avion;
     
 
     public Vuelo() {
@@ -103,14 +108,24 @@ public class Vuelo {
         this.miembro = miembro;
     }
 
+    public Avion getAvion() {
+        return avion;
+    }
+
+    public void setAvion(Avion avion) {
+        this.avion = avion;
+    }
+    
+
     @Override
     public String toString() {
-        return " ID del miembro = " + id
+        return " ID de Vuelo = " + id
+                +"\n Número de vuelo = " + num_vuelo
                 + "\n Origen = " + origen
                 + "\n Destino = " + destino
                 + "\n Hora de vuelo = " + hora
-                + "\n Fecha de vuelo: " + fecha.toString()
-                + "\n ID del Piloto: " + this.getPiloto().getId()
-                + "\n ID del Miembro: " + this.getMiembro().getId();
+                + "\n Fecha de vuelo = " + fecha.toString()
+                + "\n ID del Piloto = " + this.getPiloto().getId()
+                + "\n ID del Miembro = " + this.getMiembro().getId();
     }
 }

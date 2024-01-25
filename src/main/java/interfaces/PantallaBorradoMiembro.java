@@ -1,6 +1,5 @@
 package interfaces;
 
-import entities.Avion;
 import entities.Miembro;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -118,21 +117,15 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
 
         StringBuilder posibleError = new StringBuilder("El avión con ID" + idMiembroTextfield.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
-        Miembro miembroABorrar = new Miembro();
+        String idMiembro = idMiembroTextfield.getText();
 
         try {
-            miembroABorrar = session.get(Miembro.class, Integer.parseInt(idMiembroTextfield.getText()));
-            System.out.println(miembroABorrar.toString());
+            transaction = session.beginTransaction();
+            session.createQuery("DELETE FROM Miembro WHERE id = :idMiembro")
+                    .setParameter("idMiembro", idMiembro)
+                    .executeUpdate();
 
-            if (miembroABorrar.equals(null)) {
-                throw new Exception();
-
-            } else {
-
-                transaction = session.beginTransaction();
-                session.remove(miembroABorrar);
-                transaction.commit();
-            }
+            transaction.commit();
 
         } catch (Exception e) {
 

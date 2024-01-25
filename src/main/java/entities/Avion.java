@@ -1,10 +1,12 @@
 package entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,19 +17,13 @@ public class Avion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column (name = "codigo_avion")
-    private int codigoAvion;
+    private String codigoAvion;
     @Column (name = "tipo_avion")
     private String tipoAvion;
+    @OneToOne(mappedBy = "avion", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Vuelo vuelo;
 
     public Avion() {
-    }
-
-    public int getCodigoAvion() {
-        return codigoAvion;
-    }
-
-    public void setCodigoAvion(int codigoAvion) {
-        this.codigoAvion = codigoAvion;
     }
 
     public String getTipoAvion() {
@@ -44,6 +40,14 @@ public class Avion {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    
+        public String getCodigoAvion() {
+        return codigoAvion;
+    }
+
+    public void setCodigoAvion(String codigoAvion) {
+        this.codigoAvion = codigoAvion;
     }
 
     @Override

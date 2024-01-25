@@ -103,6 +103,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
 
         jMenuBar1.setBackground(new java.awt.Color(0, 153, 255));
+        jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jMenuBar1.setMinimumSize(new java.awt.Dimension(700, 30));
 
@@ -236,7 +237,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         });
         consultaDeDatos.add(consultaTablaVuelo);
 
-        consultaTablaAvion.setText("Consultar tabloa Avión");
+        consultaTablaAvion.setText("Consultar tabla Avión");
         consultaTablaAvion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 consultaTablaAvionActionPerformed(evt);
@@ -273,18 +274,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void disconnectJMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_disconnectJMenuMouseClicked
-
-        /*try {
-           // connection.close();
-            System.out.println("Conexión con el servidor cerrada.");
-        } catch (SQLException ex) {
-
-            textArea.append("No se ha podido cerrar la conexion con el servidor\n");
-            textArea.append(ex.getMessage() + "\n");
-            textArea.append("-1");
-            textArea.append("\n----------------------------------------------------\n");
-
-        }*/
         this.dispose();
     }//GEN-LAST:event_disconnectJMenuMouseClicked
 
@@ -296,7 +285,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private void insercionDeVueloMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeVueloMenuActionPerformed
         PantallaInsercionVuelo nuevaPantallaInsercionVuelo = new PantallaInsercionVuelo(session);
         this.dispose();
-
     }//GEN-LAST:event_insercionDeVueloMenuActionPerformed
 
     private void insercionDeAvionMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insercionDeAvionMenuActionPerformed
@@ -334,7 +322,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_actualizarUnPilotoActionPerformed
 
     private void actualizarUnVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarUnVueloActionPerformed
-        PantallaActualizarVuelo nuevaPantallaActualizarVuelo = new PantallaActualizarVuelo();
+        PantallaActualizarVuelo nuevaPantallaActualizarVuelo = new PantallaActualizarVuelo(session);
         this.dispose();
 
     }//GEN-LAST:event_actualizarUnVueloActionPerformed
@@ -348,7 +336,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private void consultaTablaPilotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaPilotoActionPerformed
 
         Transaction transaction = null;
-
         try {
             textArea.append("CONSULTA DE PILOTOS\n");
             textArea.append("=====================================\n");

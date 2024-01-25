@@ -1,8 +1,13 @@
 package interfaces;
 
+import entities.Avion;
 import entities.Miembro;
 import entities.Piloto;
+import entities.Vuelo;
+import java.sql.Date;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.util.List;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.hibernate.Session;
@@ -11,20 +16,29 @@ import org.hibernate.Transaction;
 public class PantallaInsercionVuelo extends javax.swing.JFrame {
 
     private Session session;
+    private List<Integer> listaDePilotos;
+    private List<Integer> listaDeMiembros;
+    private List<Integer> listaDeAviones;
 
     public PantallaInsercionVuelo(Session session) {
         initComponents();
         this.session = session;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        listaDePilotos = listaDePilotos();
+        listaDeMiembros = listaDeMiembros();
+        listaDeAviones = listaDeAviones();
         
+
         horadeDeVueloJLabel.setText("00:00");
-        
+
         horarioJslider.setMinimum(0);
         horarioJslider.setMaximum(1439);
         horarioJslider.setValue(0);
 
         horarioJslider.addChangeListener(new ChangeListener() {
+
             public void stateChanged(ChangeEvent e) {
                 int minutos = horarioJslider.getValue();
                 float horas = minutos / 60.0f;
@@ -32,6 +46,18 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
                 horadeDeVueloJLabel.setText(horaFormateada);
             }
         });
+        for (Integer piloto : listaDePilotos) {
+            comboBoxPiloto.addItem(piloto.toString());
+        }
+
+        for (Integer miembro : listaDeMiembros) {
+            comboBoxMiembro.addItem(miembro.toString());
+
+        }
+        
+        for (Integer avion : listaDeAviones) {
+            comboBoxAvion.addItem(avion.toString()); 
+        }
     }
 
     /**
@@ -49,7 +75,7 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         origenDelVueloTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        fechaDeVueloTextField = new javax.swing.JTextField();
+        anioTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         horarioJslider = new javax.swing.JSlider();
@@ -59,9 +85,16 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         cancelarInsercionVueloButton = new javax.swing.JButton();
         insertarNuevoVueloButton = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxPiloto = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        comboBoxMiembro = new javax.swing.JComboBox<>();
+        diaTextField = new javax.swing.JTextField();
+        mesTextField = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        comboBoxAvion = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,9 +113,9 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel4.setText("Destino del vuelo:");
 
-        fechaDeVueloTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        fechaDeVueloTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fechaDeVueloTextField.setMaximumSize(null);
+        anioTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        anioTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        anioTextField.setMaximumSize(null);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -121,12 +154,31 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel7.setText("Piloto del vuelo:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxPiloto.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel8.setText("Miembro del vuelo:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxMiembro.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+
+        diaTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        diaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        diaTextField.setMaximumSize(null);
+
+        mesTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        mesTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        mesTextField.setMaximumSize(null);
+
+        jLabel9.setText("AÑO");
+
+        jLabel10.setText("MES");
+
+        jLabel11.setText("DÍA");
+
+        jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel12.setText("Avión del vuelo:");
+
+        comboBoxAvion.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -145,36 +197,50 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
                                 .addComponent(insertarNuevoVueloButton))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE)
-                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(jLabel5)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                        .addGap(17, 17, 17))
+                                                .addComponent(jLabel5)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel8)
-                                            .addComponent(jLabel7))
+                                            .addComponent(jLabel7)
+                                            .addComponent(jLabel12))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(origenDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                    .addComponent(origenDelVueloTextField)
                                     .addComponent(numeroDeVueloTextfield)
-                                    .addComponent(horarioJslider, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                                    .addComponent(horarioJslider, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                                     .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(fechaDeVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel11)
+                                        .addGap(3, 3, 3)
+                                        .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(comboBoxPiloto, javax.swing.GroupLayout.Alignment.TRAILING, 0, 130, Short.MAX_VALUE)
+                                            .addComponent(comboBoxMiembro, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(comboBoxAvion, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                         .addGap(24, 24, 24)))
                 .addContainerGap())
         );
@@ -203,16 +269,25 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fechaDeVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxPiloto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxMiembro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboBoxAvion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelarInsercionVueloButton)
                     .addComponent(insertarNuevoVueloButton))
@@ -246,19 +321,35 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         String origenDeVuelo = origenDelVueloTextField.getText();
         String destinoDeVuelo = destinoDelVueloTextField.getText();
         String horaDeVuelo = horadeDeVueloJLabel.getText();
-        String fechaDeVuelo;
-        Piloto nuevoPiloto = null;
-        Miembro nuevoMiembro = null;
-
+        String anioFecha = anioTextField.getText();
+        String mesFecha = mesTextField.getText();
+        String diaFecha = diaTextField.getText();
+        Date fechaDeVuelo = Date.valueOf(formateoDeFecha(anioFecha, mesFecha, diaFecha));
+        
+        Vuelo nuevoVuelo = new Vuelo();
+        nuevoVuelo.setNum_vuelo(Integer.parseInt(numeroDeVuelo));
+        nuevoVuelo.setOrigen(origenDeVuelo);
+        nuevoVuelo.setDestino(destinoDeVuelo);
+        nuevoVuelo.setHora(horaDeVuelo);
+        nuevoVuelo.setFecha(fechaDeVuelo);
+        nuevoVuelo.setPiloto(pilotoDelVuelo(comboBoxPiloto.getSelectedItem().toString()));
+        nuevoVuelo.setMiembro(miembroDelVuelo(comboBoxPiloto.getSelectedItem().toString()));
+        nuevoVuelo.setAvion(avionDelVuelo(comboBoxAvion.getSelectedItem().toString()));
+        
         try {
+            
+            transaction = session.beginTransaction();
+            session.persist(nuevoVuelo);
+            transaction.commit();
 
         } catch (Exception e) {
-
             if (transaction != null) {
                 transaction.rollback();
-                posibleError = new StringBuilder("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                posibleError = new StringBuilder("ERROR a crear el vuelo...\n"
+                        + "el avión solo puede estar asignado a un vuelo."
                         + e.getMessage());
             }
+            e.printStackTrace();
         }
         this.dispose();
         PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
@@ -271,16 +362,75 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
         return formatoHora.format(horasEnteras) + ":" + formatoHora.format(minutos);
     }
 
+    private LocalDate formateoDeFecha(String anioFecha, String mesFecha, String diaFecha) {
+
+        return LocalDate.of(
+                Integer.parseInt(anioFecha),
+                Integer.parseInt(mesFecha),
+                Integer.parseInt(diaFecha));
+
+    }
+
+    private List<Integer> listaDePilotos() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List<Integer> lista = session.createQuery("SELECT id FROM Piloto", Integer.class
+        ).getResultList();
+        transaction.commit();
+        return lista;
+    }
+
+    private List<Integer> listaDeMiembros() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List<Integer> lista = session.createQuery("SELECT id FROM Miembro", Integer.class
+        ).getResultList();
+        transaction.commit();
+        return lista;
+    }
+    
+       private List<Integer> listaDeAviones() {
+
+        Transaction transaction = null;
+        transaction = session.beginTransaction();
+        List<Integer> lista = session.createQuery("SELECT id FROM Avion", Integer.class
+        ).getResultList();
+        transaction.commit();
+        return lista;
+    }
+
+    private Piloto pilotoDelVuelo(String idPiloto) {
+        Piloto piloto = session.get(Piloto.class, idPiloto);
+        return piloto;
+    }
+
+    private Miembro miembroDelVuelo(String idMiembro) {
+        Miembro miembro = session.get(Miembro.class, idMiembro);
+        return miembro;
+    }
+    
+    private Avion avionDelVuelo(String idAvion) {
+        Avion avion = session.get(Avion.class, idAvion);
+        return avion;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField anioTextField;
     private javax.swing.JButton cancelarInsercionVueloButton;
+    private javax.swing.JComboBox<String> comboBoxAvion;
+    private javax.swing.JComboBox<String> comboBoxMiembro;
+    private javax.swing.JComboBox<String> comboBoxPiloto;
     private javax.swing.JTextField destinoDelVueloTextField;
-    private javax.swing.JTextField fechaDeVueloTextField;
+    private javax.swing.JTextField diaTextField;
     private javax.swing.JLabel horadeDeVueloJLabel;
     private javax.swing.JSlider horarioJslider;
     private javax.swing.JButton insertarNuevoVueloButton;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -288,8 +438,11 @@ public class PantallaInsercionVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField mesTextField;
     private javax.swing.JTextField numeroDeVueloTextfield;
     private javax.swing.JTextField origenDelVueloTextField;
     // End of variables declaration//GEN-END:variables
+
 }

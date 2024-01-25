@@ -1,7 +1,6 @@
 package interfaces;
 
 import entities.Avion;
-import jakarta.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -116,21 +115,15 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
 
         StringBuilder posibleError = new StringBuilder("El avión con ID " + idAvionTextField.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
-        Avion avionABorrar = new Avion();
+        String idAvion = idAvionTextField.getText();
 
         try {
-            avionABorrar = session.get(Avion.class, Integer.parseInt(idAvionTextField.getText()));
-            System.out.println(avionABorrar.toString());
+            transaction = session.beginTransaction();
+            session.createQuery("DELETE FROM Avion WHERE id = :idAvion")
+                    .setParameter("idAvion", idAvion)
+                    .executeUpdate();
 
-            if (avionABorrar.equals(null)) {
-                throw new Exception();
-
-            } else {
-
-                transaction = session.beginTransaction();
-                session.remove(avionABorrar);
-                transaction.commit();
-            }
+            transaction.commit();
 
         } catch (Exception e) {
 

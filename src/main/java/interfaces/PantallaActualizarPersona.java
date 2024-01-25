@@ -1,8 +1,6 @@
 package interfaces;
 
-import entities.Avion;
 import entities.Miembro;
-import entities.Persona;
 import entities.Piloto;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -20,6 +18,39 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         this.actualizarMiembro = null;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+        isPiloto.addActionListener((e) -> {
+
+            if (isPiloto.isSelected()) {
+
+                idPersonaTextField.setEnabled(true);
+                buscarIDPersonaButton.setEnabled(true);
+
+            } else {
+
+                idPersonaTextField.setEnabled(false);
+                buscarIDPersonaButton.setEnabled(false);
+            }
+
+        });
+
+        isMiembro.addActionListener((e) -> {
+
+            if (isMiembro.isSelected()) {
+
+                idPersonaTextField.setEnabled(true);
+                buscarIDPersonaButton.setEnabled(true);
+
+            } else {
+
+                idPersonaTextField.setEnabled(false);
+                buscarIDPersonaButton.setEnabled(false);
+            }
+        });
+
+        grupoDeCheckboxs.add(isPiloto);
+        grupoDeCheckboxs.add(isMiembro);
+
     }
 
     /**
@@ -31,6 +62,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupoDeCheckboxs = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -112,6 +144,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         idPersonaTextField.setEnabled(false);
 
         buscarIDPersonaButton.setText("BUSCAR");
+        buscarIDPersonaButton.setEnabled(false);
         buscarIDPersonaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buscarIDPersonaButtonActionPerformed(evt);
@@ -220,35 +253,39 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
 
     private void actualizarPersonaJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarPersonaJButtonActionPerformed
 
-        StringBuilder posibleError = new StringBuilder("La inserción se realizo correctamente.\n");
+        StringBuilder posibleError = new StringBuilder("La actualización se realizó correctamente.\n");
         Transaction transaction = null;
-
+        
+        String idPersona = idPersonaTextField.getText();
         String codigoPersona = codigoPersonaTextField.getText();
         String nombrePersona = nombrePersonaTextfield.getText();
         String horasDeVuelo = horasDeVueloPilotoTextField.getText();
 
         try {
-            if (!actualizarPiloto.equals(null)) {
+            transaction = session.beginTransaction();
+            if (actualizarPiloto != null) {
 
-                actualizarPiloto.setCodigo(Integer.parseInt(codigoPersona));
-                actualizarPiloto.setNombrePersona(nombrePersona);
-                actualizarPiloto.setHoraDeVuelo(Integer.parseInt(horasDeVuelo));
+                session.createQuery("UPDATE Piloto SET codigo = :codigo, "
+                        + "nombrePersona = :nombrePersona, "
+                        + "horaDeVuelo = :horaDeVuelo WHERE id = :idPersona")
+                        .setParameter("codigo", codigoPersona)
+                        .setParameter("nombrePersona", nombrePersona)
+                        .setParameter("horaDeVuelo", Integer.parseInt(horasDeVuelo))
+                        .setParameter("idPersona", idPersona)
+                        .executeUpdate();
 
-                transaction = session.beginTransaction();
-                session.merge(actualizarPiloto);
-                transaction.commit();
+            } else if (actualizarMiembro != null) {
 
-            } else if (!actualizarMiembro.equals(null)) {
-
-                actualizarPiloto.setCodigo(Integer.parseInt(codigoPersona));
-                actualizarPiloto.setNombrePersona(nombrePersona);
-
-                transaction = session.beginTransaction();
-                session.merge(actualizarMiembro);
-                transaction.commit();
-
+                session.createQuery("UPDATE Miembro SET codigo = :codigo, "
+                        + "nombrePersona = :nombrePersona WHERE id = :idPersona")
+                        .setParameter("codigo", codigoPersona)
+                        .setParameter("nombrePersona", nombrePersona)
+                        .setParameter("idPersona", idPersona)
+                        .executeUpdate();
             }
-
+            
+            transaction.commit();
+            
         } catch (Exception e) {
 
             if (transaction != null) {
@@ -263,6 +300,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
                         + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
                         + e.getMessage());
             }
+            e.printStackTrace();
         }
         this.dispose();
         PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
@@ -276,17 +314,18 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
 
         if (isPiloto.isSelected()) {
             pilotoComprobacion = session.get(Piloto.class, idPersona);
+
         } else if (isMiembro.isSelected()) {
             miembroComprobacion = session.get(Miembro.class, idPersona);
         }
 
+        System.out.println(pilotoComprobacion);
+        System.err.println(miembroComprobacion);
+
         try {
 
-            if (pilotoComprobacion.equals(null) && miembroComprobacion.equals(null)) {
-                throw new Exception();
-            } else if (isMiembro.isSelected()) {
+            if (isPiloto.isSelected() & pilotoComprobacion != null) {
 
-                idPersonaTextField.setEnabled(true);
                 codigoPersonaTextField.setEnabled(true);
                 nombrePersonaTextfield.setEnabled(true);
                 horasDeVueloPilotoTextField.setEnabled(true);
@@ -295,14 +334,17 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
                 horasDeVueloPilotoTextField.setText(String.valueOf(pilotoComprobacion.getHoraDeVuelo()));
                 actualizarPiloto = pilotoComprobacion;
 
-            } else {
+            } else if (isMiembro.isSelected() & miembroComprobacion != null) {
 
-                idPersonaTextField.setEnabled(true);
                 codigoPersonaTextField.setEnabled(true);
                 nombrePersonaTextfield.setEnabled(true);
                 codigoPersonaTextField.setText(String.valueOf(miembroComprobacion.getCodigo()));
                 nombrePersonaTextfield.setText(miembroComprobacion.getNombrePersona());
                 actualizarMiembro = miembroComprobacion;
+
+            } else {
+
+                throw new Exception();
 
             }
 
@@ -323,6 +365,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
     private javax.swing.JButton buscarIDPersonaButton;
     private javax.swing.JButton cancelarInsercionJButton;
     private javax.swing.JTextField codigoPersonaTextField;
+    private javax.swing.ButtonGroup grupoDeCheckboxs;
     private javax.swing.JLabel horasDeVueloJLabel;
     private javax.swing.JTextField horasDeVueloPilotoTextField;
     private javax.swing.JTextField idPersonaTextField;

@@ -1,5 +1,6 @@
 package entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +16,7 @@ public class Miembro extends Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToMany(mappedBy = "miembro")
+    @OneToMany(mappedBy = "miembro", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set <Vuelo> vuelos;
 
     @Override
@@ -28,14 +29,16 @@ public class Miembro extends Persona {
     }
 
     @Override
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         super.setCodigo(codigo);
     }
 
     @Override
-    public int getCodigo() {
+    public String getCodigo() {
         return super.getCodigo();
     }
+
+
 
     public int getId() {
         return id;
@@ -58,8 +61,7 @@ public class Miembro extends Persona {
     public String toString() {
         return " ID del miembro = " + id 
                 + "\n Código = " + this.getCodigo() 
-                + "\n Nombre: " + this.getNombrePersona()
-                + "\n Vuelos: " + this.getVuelos();
+                + "\n Nombre: " + this.getNombrePersona();
     }
     
     

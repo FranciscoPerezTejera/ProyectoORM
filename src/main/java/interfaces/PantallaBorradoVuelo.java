@@ -1,7 +1,6 @@
 package interfaces;
 
-import entities.Piloto;
-import entities.Vuelo;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -55,7 +54,7 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
         });
 
         borrarVueloButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        borrarVueloButton.setText("INSERTAR");
+        borrarVueloButton.setText("BORRAR");
         borrarVueloButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 borrarVueloButtonActionPerformed(evt);
@@ -68,17 +67,17 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cancelarBorradoButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(borrarVueloButton)
-                        .addGap(51, 51, 51))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(27, 27, 27)
+                        .addGap(36, 36, 36)
                         .addComponent(idVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cancelarBorradoButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(borrarVueloButton)
+                        .addContainerGap(33, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -123,22 +122,15 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
 
         StringBuilder posibleError = new StringBuilder("El vuelo con ID" + idVueloTextField.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
-        Vuelo vueloABorrar = new Vuelo();
-
+        
+        String idVuelo = idVueloTextField.getText();
+        
         try {
-            vueloABorrar = session.get(Vuelo.class, Integer.parseInt(idVueloTextField.getText()));
-            System.out.println(vueloABorrar);
-
-            if (vueloABorrar.equals(null)) {
-                throw new Exception();
-
-            } else {
-
-                transaction = session.beginTransaction();
-                session.remove(vueloABorrar);
+            transaction = session.beginTransaction();
+                session.createQuery("DELETE FROM Vuelo WHERE id = :idVuelo")
+                        .setParameter("idVuelo", idVuelo)
+                        .executeUpdate();
                 transaction.commit();
-
-            }
 
         } catch (Exception e) {
 
@@ -155,10 +147,8 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
                         + e.getMessage());
             }
         }
-
         this.dispose();
         PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
-        this.dispose();
     }//GEN-LAST:event_borrarVueloButtonActionPerformed
 
 

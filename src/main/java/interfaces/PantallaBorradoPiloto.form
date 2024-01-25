@@ -50,7 +50,7 @@
                   <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="borrarPilotoButton" min="-2" max="-2" attributes="0"/>
-                      <Component id="codigoPilotoTextfield" min="-2" pref="90" max="-2" attributes="0"/>
+                      <Component id="idPilotoTextfield" min="-2" pref="90" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="126" max="-2" attributes="0"/>
               </Group>
@@ -69,14 +69,14 @@
                   <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="codigoPilotoTextfield" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="idPilotoTextfield" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="28" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="borrarPilotoButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cancelarBorradoButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="16" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -97,10 +97,10 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Arial" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Codigo del piloto:"/>
+            <Property name="text" type="java.lang.String" value="ID del piloto:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="codigoPilotoTextfield">
+        <Component class="javax.swing.JTextField" name="idPilotoTextfield">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>

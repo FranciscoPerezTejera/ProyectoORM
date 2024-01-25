@@ -71,9 +71,9 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="origenDelVueloTextField" alignment="0" pref="175" max="32767" attributes="0"/>
                                       <Component id="numeroDeVueloTextfield" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jSlider1" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="destinoDelVueloTextField1" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="sliderHoras" alignment="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="destinoDelVueloTextField" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="fechaDelVueloTextField" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -92,6 +92,13 @@
                                       <Component id="pilotoDelVueloJCheckBox" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="idDelVuelo" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="idDeVueloTextField" min="-2" pref="78" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="buscarIDVueloButton" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       </Group>
@@ -103,8 +110,14 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="35" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="idDelVuelo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="idDeVueloTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="buscarIDVueloButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -117,19 +130,19 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="destinoDelVueloTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="destinoDelVueloTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel5" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
-                      <Component id="jSlider1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sliderHoras" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="horadeDeVueloJLabel" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel6" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
-                      <Component id="destinoDelVueloTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="fechaDelVueloTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -141,7 +154,7 @@
                       <Component id="miembroDelVueloJCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" pref="15" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="34" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="cancelarInsercionVueloButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="insertarNuevoVueloButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -166,10 +179,8 @@
               <Font name="Segoe UI" size="12" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="numeroDeVueloTextfieldActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="origenDelVueloTextField">
           <Properties>
@@ -196,7 +207,7 @@
             <Property name="text" type="java.lang.String" value="Destino del vuelo:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="destinoDelVueloTextField1">
+        <Component class="javax.swing.JTextField" name="destinoDelVueloTextField">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -222,12 +233,12 @@
             <Property name="text" type="java.lang.String" value="   "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSlider" name="jSlider1">
+        <Component class="javax.swing.JSlider" name="sliderHoras">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="destinoDelVueloTextField">
+        <Component class="javax.swing.JTextField" name="fechaDelVueloTextField">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -326,6 +337,30 @@
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="idDelVuelo">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Arial" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Numero de vuelo:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="idDeVueloTextField">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="12" style="1"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="buscarIDVueloButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="BUSCAR"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buscarIDVueloButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

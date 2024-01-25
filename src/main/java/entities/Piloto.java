@@ -19,7 +19,7 @@ public class Piloto extends Persona {
     private int id;
     @Column (name = "hora_de_vuelo")
     private int horaDeVuelo;
-    @OneToMany(mappedBy = "piloto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "piloto", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Vuelo> vuelos;
 
     public Piloto() {
@@ -37,12 +37,12 @@ public class Piloto extends Persona {
     }
 
     @Override
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         super.setCodigo(codigo);
     }
 
     @Override
-    public int getCodigo() {
+    public String getCodigo() {
         return super.getCodigo();
     }
 
@@ -74,7 +74,6 @@ public class Piloto extends Persona {
     public String toString() {
         return " ID del miembro = " + id 
                 + "\n Código = " + this.getCodigo() 
-                + "\n Nombre: " + this.getNombrePersona()
-                + "\n Vuelos: " + this.getVuelos();
+                + "\n Nombre: " + this.getNombrePersona();
     }  
 }

@@ -5,19 +5,21 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Persona {
     
-    private int codigo;
+    private String codigo;
     private String nombrePersona;
 
     public Persona() {
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+
+    
 
     public String getNombrePersona() {
         return nombrePersona;

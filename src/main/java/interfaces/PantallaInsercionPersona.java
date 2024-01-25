@@ -192,30 +192,36 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
         if (isPiloto.isSelected()) {
             String horasDeVuelo = horasDeVueloPilotoTextField.getText();
             nuevoPiloto = new Piloto();
-            nuevoPiloto.setCodigo(Integer.parseInt(codigoPersona));
+            nuevoPiloto.setCodigo(codigoPersona);
             nuevoPiloto.setNombrePersona(nombrePersona);
             nuevoPiloto.setHoraDeVuelo(Integer.parseInt(horasDeVuelo));
             posibleError.append("El piloto llamado " + nuevoPiloto.getNombrePersona() + " ha sido insertado con éxito.");
 
         } else {
             nuevoMiembro = new Miembro();
-            nuevoMiembro.setCodigo(Integer.parseInt(codigoPersona));
+            nuevoMiembro.setCodigo(codigoPersona);
             nuevoMiembro.setNombrePersona(nombrePersona);
             posibleError.append("El miembro llamado " + nuevoMiembro.getNombrePersona() + " ha sido insertado con éxito.");
 
         }
-
         try {
 
+            transaction = session.beginTransaction();
+
             if (nuevoPiloto != null) {
-                transaction = session.beginTransaction();
-                session.persist(nuevoPiloto);
-                transaction.commit();
+                session.createQuery("INSERT INTO Piloto (codigo, nombrePersona, horaDeVuelo) VALUES (:codigo, :nombrePersona, :horaDeVuelo)")
+                        .setParameter("codigo", nuevoPiloto.getCodigo())
+                        .setParameter("nombrePersona", nuevoPiloto.getNombrePersona())
+                        .setParameter("horaDeVuelo", nuevoPiloto.getHoraDeVuelo())
+                        .executeUpdate();
             } else if (nuevoMiembro != null) {
-                transaction = session.beginTransaction();
-                session.persist(nuevoMiembro);
-                transaction.commit();
+                session.createQuery("INSERT INTO Miembro (codigo, nombrePersona) VALUES (:codigo, :nombrePersona)")
+                        .setParameter("codigo", nuevoMiembro.getCodigo())
+                        .setParameter("nombrePersona", nuevoMiembro.getNombrePersona())
+                        .executeUpdate();
             }
+
+            transaction.commit();
 
         } catch (Exception e) {
 
@@ -224,6 +230,7 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
                 posibleError = new StringBuilder("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
                         + e.getMessage());
             }
+            e.printStackTrace();
         }
         this.dispose();
         PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);

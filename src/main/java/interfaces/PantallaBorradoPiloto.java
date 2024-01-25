@@ -27,7 +27,7 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        codigoPilotoTextfield = new javax.swing.JTextField();
+        idPilotoTextfield = new javax.swing.JTextField();
         cancelarBorradoButton = new javax.swing.JButton();
         borrarPilotoButton = new javax.swing.JButton();
 
@@ -39,10 +39,10 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel3.setText("Codigo del piloto:");
+        jLabel3.setText("ID del piloto:");
 
-        codigoPilotoTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        codigoPilotoTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idPilotoTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        idPilotoTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         cancelarBorradoButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         cancelarBorradoButton.setText("CANCELAR");
@@ -74,7 +74,7 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
                 .addGap(53, 53, 53)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(borrarPilotoButton)
-                    .addComponent(codigoPilotoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(idPilotoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(126, 126, 126))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -89,12 +89,12 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(codigoPilotoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                    .addComponent(idPilotoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(borrarPilotoButton)
                     .addComponent(cancelarBorradoButton))
-                .addContainerGap())
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -118,24 +118,17 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
 
     private void borrarPilotoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarPilotoButtonActionPerformed
 
-        StringBuilder posibleError = new StringBuilder("El piloto con ID" + codigoPilotoTextfield.getText() + ", ha sido eliminado correctamente.\n");
+        StringBuilder posibleError = new StringBuilder("El piloto con ID" + idPilotoTextfield.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
-        Piloto pilotoABorrar = new Piloto();
+        String idPiloto = idPilotoTextfield.getText();
 
         try {
-            pilotoABorrar = session.get(Piloto.class, Integer.parseInt(codigoPilotoTextfield.getText()));
-            System.out.println(pilotoABorrar.toString());
+            transaction = session.beginTransaction();
+            session.createQuery("DELETE FROM Piloto WHERE id = :idPiloto")
+                    .setParameter("idPiloto", idPiloto)
+                    .executeUpdate();
 
-            if (pilotoABorrar.equals(null)) {
-                throw new Exception();
-
-            } else {
-
-                transaction = session.beginTransaction();
-                session.remove(pilotoABorrar);
-                transaction.commit();
-
-            }
+            transaction.commit();
 
         } catch (Exception e) {
 
@@ -144,10 +137,11 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
                 posibleError = new StringBuilder();
                 posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
                         + e.getMessage());
+                e.printStackTrace();
 
             } else {
                 posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + codigoPilotoTextfield.getText() + ", "
+                posibleError.append("El avión con ID " + idPilotoTextfield.getText() + ", "
                         + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
                         + e.getMessage());
             }
@@ -161,7 +155,7 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton borrarPilotoButton;
     private javax.swing.JButton cancelarBorradoButton;
-    private javax.swing.JTextField codigoPilotoTextfield;
+    private javax.swing.JTextField idPilotoTextfield;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;

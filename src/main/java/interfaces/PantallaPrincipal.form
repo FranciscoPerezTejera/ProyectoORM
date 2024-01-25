@@ -7,6 +7,9 @@
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="99" red="0" type="rgb"/>
         </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ff" green="ff" red="ff" type="rgb"/>
+        </Property>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="14" style="1"/>
         </Property>
@@ -171,7 +174,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="consultaTablaAvion">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Consultar tabloa Avi&#xf3;n"/>
+                <Property name="text" type="java.lang.String" value="Consultar tabla Avi&#xf3;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="consultaTablaAvionActionPerformed"/>

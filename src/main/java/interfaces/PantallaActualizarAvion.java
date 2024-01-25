@@ -7,12 +7,10 @@ import org.hibernate.Transaction;
 public class PantallaActualizarAvion extends javax.swing.JFrame {
 
     private Session session;
-    private Avion avionActualizado;
 
     public PantallaActualizarAvion(Session session) {
         initComponents();
         this.session = session;
-        this.avionActualizado = new Avion();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -169,22 +167,24 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
 
     private void insertarAvionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarAvionButtonActionPerformed
 
-        StringBuilder posibleError = new StringBuilder("La inserción se realizo correctamente.\n");
+        StringBuilder posibleError = new StringBuilder("La actualización se realizó correctamente.\n");
         Transaction transaction = null;
         
+        String idAvion = idAvionTextField.getText();
         String codigoAvion = codigoAvionTextField.getText();
         String tipoAvion = tipoDeAvionTextField.getText();
-        
-        
 
         try {
-            System.out.println(avionActualizado.toString());
-            avionActualizado.setCodigoAvion(Integer.parseInt(codigoAvion));
-            avionActualizado.setTipoAvion(tipoAvion);
+
             transaction = session.beginTransaction();
-            session.merge(avionActualizado);
+
+            session.createQuery("UPDATE Avion SET codigoAvion = :codigo, "
+                        + "tipoAvion = :tipoAvion WHERE id = :idAvion")
+                        .setParameter("codigo", codigoAvion)
+                        .setParameter("tipoAvion", tipoAvion)
+                        .setParameter("idAvion", idAvion)
+                        .executeUpdate();
             transaction.commit();
-            
 
         } catch (Exception e) {
 
@@ -222,7 +222,6 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
                 tipoDeAvionTextField.setEnabled(true);
                 codigoAvionTextField.setText(String.valueOf(avionComprobacion.getCodigoAvion()));
                 tipoDeAvionTextField.setText(avionComprobacion.getTipoAvion());
-                avionActualizado = avionComprobacion;
             }
 
         } catch (Exception e) {
