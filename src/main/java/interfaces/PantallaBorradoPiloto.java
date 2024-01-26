@@ -1,16 +1,20 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Piloto;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaBorradoPiloto extends javax.swing.JFrame {
 
     private Session session;
+    private ControlDeExcepciones error;
 
     public PantallaBorradoPiloto(Session session) {
         initComponents();
         this.session = session;
+        error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -53,7 +57,7 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
         });
 
         borrarPilotoButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        borrarPilotoButton.setText("INSERTAR");
+        borrarPilotoButton.setText("BORRAR");
         borrarPilotoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 borrarPilotoButtonActionPerformed(evt);
@@ -72,9 +76,9 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
                         .addComponent(cancelarBorradoButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(53, 53, 53)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(borrarPilotoButton)
-                    .addComponent(idPilotoTextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(borrarPilotoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(idPilotoTextfield))
                 .addGap(126, 126, 126))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -121,34 +125,28 @@ public class PantallaBorradoPiloto extends javax.swing.JFrame {
         StringBuilder posibleError = new StringBuilder("El piloto con ID" + idPilotoTextfield.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
         String idPiloto = idPilotoTextfield.getText();
+        Piloto borrarPiloto = null;
 
-        try {
-            transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM Piloto WHERE id = :idPiloto")
-                    .setParameter("idPiloto", idPiloto)
-                    .executeUpdate();
+        if (!error.estaVacio(idPiloto) && error.esUnNumero(idPiloto)) {
 
-            transaction.commit();
+            try {
+                transaction = session.beginTransaction();
+                borrarPiloto = session.get(Piloto.class, idPiloto);
+                session.remove(borrarPiloto);
+                transaction.commit();
 
-        } catch (Exception e) {
+                this.dispose();
+                PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
 
-            if (transaction != null) {
+            } catch (Exception e) {
+
                 transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Ese ID de piloto no existe en la base de datos.", "ERROR", JOptionPane.ERROR_MESSAGE);
 
-            } else {
-                posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + idPilotoTextfield.getText() + ", "
-                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
-                        + e.getMessage());
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "El ID solo admite números\n y no puede estar vacio el campo", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-
-        this.dispose();
-        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borrarPilotoButtonActionPerformed
 
 

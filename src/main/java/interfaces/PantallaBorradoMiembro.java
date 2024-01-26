@@ -1,16 +1,20 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Miembro;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaBorradoMiembro extends javax.swing.JFrame {
 
     private Session session;
+    private ControlDeExcepciones error;
 
     public PantallaBorradoMiembro(Session session) {
         initComponents();
         this.session = session;
+        error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -53,7 +57,7 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
         });
 
         borradoMiembroButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        borradoMiembroButton.setText("INSERTAR");
+        borradoMiembroButton.setText("BORRAR");
         borradoMiembroButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 borradoMiembroButtonActionPerformed(evt);
@@ -115,36 +119,31 @@ public class PantallaBorradoMiembro extends javax.swing.JFrame {
 
     private void borradoMiembroButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borradoMiembroButtonActionPerformed
 
-        StringBuilder posibleError = new StringBuilder("El avión con ID" + idMiembroTextfield.getText() + ", ha sido eliminado correctamente.\n");
+        StringBuilder posibleError = new StringBuilder("El avión con ID " + idMiembroTextfield.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
         String idMiembro = idMiembroTextfield.getText();
+        Miembro borrarMiembro = null;
 
-        try {
-            transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM Miembro WHERE id = :idMiembro")
-                    .setParameter("idMiembro", idMiembro)
-                    .executeUpdate();
+        if (!error.estaVacio(idMiembro) && error.esUnNumero(idMiembro)) {
 
-            transaction.commit();
+            try {
+                transaction = session.beginTransaction();
+                borrarMiembro = session.get(Miembro.class, idMiembro);
+                session.remove(borrarMiembro);
+                transaction.commit();
 
-        } catch (Exception e) {
+                this.dispose();
+                PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
 
-            if (transaction != null) {
+            } catch (Exception e) {
+                
                 transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Ese ID de miembro no existe en la base de datos.", "ERROR", JOptionPane.ERROR_MESSAGE);
 
-            } else {
-                posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + idMiembroTextfield.getText() + ", "
-                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
-                        + e.getMessage());
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "El ID solo admite números\n y no puede estar vacio el campo", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-
-        this.dispose();
-        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borradoMiembroButtonActionPerformed
 
 

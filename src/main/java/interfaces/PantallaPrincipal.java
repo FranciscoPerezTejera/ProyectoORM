@@ -4,11 +4,8 @@ import entities.Avion;
 import entities.Miembro;
 import entities.Piloto;
 import entities.Vuelo;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -22,8 +19,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         //this.connection = connection;
         this.session = session;
-        this.posibleError = new StringBuilder();
+        this.posibleError = new StringBuilder("Bienvenidos a la aplicación para la gestión CRUD sobre la base de datos con hibernate");
         this.setVisible(true);
+        textArea.append(posibleError.toString());
     }
 
     public PantallaPrincipal(Session session, StringBuilder posibleError) {
@@ -33,7 +31,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         this.session = session;
         this.posibleError = posibleError;
         textArea.append(posibleError.toString());
-        textArea.append("------------------------------------------------\n");
         this.setVisible(true);
 
     }
@@ -43,11 +40,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDeDatos = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         insercionDato = new javax.swing.JMenu();
         insercionDePersonaMenu = new javax.swing.JMenuItem();
@@ -76,9 +73,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("HIBERNATE ACCESO A DATOS");
+        jPanel1.setBackground(new java.awt.Color(161, 155, 118));
+        jPanel1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
 
         textArea.setEditable(false);
         textArea.setColumns(20);
@@ -113,35 +109,40 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         tablaDeDatos.setEnabled(false);
         jScrollPane2.setViewportView(tablaDeDatos);
 
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/hibernate-logo.png"))); // NOI18N
+        jLabel2.setToolTipText("");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 896, Short.MAX_VALUE))
                 .addContainerGap())
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addComponent(jLabel1)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                .addGap(12, 12, 12))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        jMenuBar1.setBackground(new java.awt.Color(0, 153, 255));
+        jMenuBar1.setBackground(new java.awt.Color(188, 174, 121));
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jMenuBar1.setMinimumSize(new java.awt.Dimension(700, 30));
 
+        insercionDato.setBackground(new java.awt.Color(104, 113, 111));
         insercionDato.setBorder(null);
         insercionDato.setText("INSERCIÓN DE DATOS");
         insercionDato.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -174,6 +175,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(insercionDato);
 
+        borradoDatos.setBackground(new java.awt.Color(104, 113, 111));
         borradoDatos.setBorder(null);
         borradoDatos.setText("BORRADO DE DATOS");
         borradoDatos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -214,6 +216,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(borradoDatos);
 
+        actualizarDatos.setBackground(new java.awt.Color(104, 113, 111));
         actualizarDatos.setBorder(null);
         actualizarDatos.setText("ACTUALIZACIÓN DE DATOS");
         actualizarDatos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -246,6 +249,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(actualizarDatos);
 
+        consultaDeDatos.setBackground(new java.awt.Color(104, 113, 111));
         consultaDeDatos.setText("CONSULTA DE DATOS");
 
         consultaTablaPiloto.setText("Consultar tabla Piloto");
@@ -282,6 +286,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(consultaDeDatos);
 
+        consutlasExtras.setBackground(new java.awt.Color(104, 113, 111));
         consutlasExtras.setText("CONSULTAS EXTRAS");
 
         extraUno.setText("Contar la cantidad de vuelos realizados por cada piloto");
@@ -318,6 +323,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(consutlasExtras);
 
+        disconnectJMenu.setBackground(new java.awt.Color(104, 113, 111));
         disconnectJMenu.setText("SALIR");
         disconnectJMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         disconnectJMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -338,7 +344,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -580,7 +586,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem insercionDeAvionMenu;
     private javax.swing.JMenuItem insercionDePersonaMenu;
     private javax.swing.JMenuItem insercionDeVueloMenu;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

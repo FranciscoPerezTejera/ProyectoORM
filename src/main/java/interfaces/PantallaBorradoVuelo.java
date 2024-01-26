@@ -1,17 +1,21 @@
 package interfaces;
 
-
+import Utiles.ControlDeExcepciones;
+import entities.Vuelo;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaBorradoVuelo extends javax.swing.JFrame {
 
     private Session session;
+    private ControlDeExcepciones error;
 
     public PantallaBorradoVuelo(Session session) {
         initComponents();
 
         this.session = session;
+        error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -70,14 +74,13 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(36, 36, 36)
-                        .addComponent(idVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addComponent(idVueloTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cancelarBorradoButton)
                         .addGap(18, 18, 18)
-                        .addComponent(borrarVueloButton)
-                        .addContainerGap(33, Short.MAX_VALUE))))
+                        .addComponent(borrarVueloButton)))
+                .addContainerGap(33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -122,33 +125,32 @@ public class PantallaBorradoVuelo extends javax.swing.JFrame {
 
         StringBuilder posibleError = new StringBuilder("El vuelo con ID" + idVueloTextField.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
-        
+        Vuelo borrarVuelo = null;
+
         String idVuelo = idVueloTextField.getText();
-        
-        try {
-            transaction = session.beginTransaction();
-                session.createQuery("DELETE FROM Vuelo WHERE id = :idVuelo")
-                        .setParameter("idVuelo", idVuelo)
-                        .executeUpdate();
+
+        if (!error.estaVacio(idVuelo) && error.esUnNumero(idVuelo)) {
+
+            try {
+                transaction = session.beginTransaction();
+                borrarVuelo = session.get(Vuelo.class, idVuelo);
+                session.remove(borrarVuelo);
                 transaction.commit();
 
-        } catch (Exception e) {
+                this.dispose();
+                PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
 
-            if (transaction != null) {
+            } catch (Exception e) {
+
                 transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Ese ID de vuelo no existe en la base de datos.", "ERROR", JOptionPane.ERROR_MESSAGE);
 
-            } else {
-                posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + idVueloTextField.getText() + ", "
-                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
-                        + e.getMessage());
             }
+        } else {
+
+            JOptionPane.showMessageDialog(null, "El ID solo admite números\n y no puede estar vacio el campo", "ERROR", JOptionPane.ERROR_MESSAGE);
+
         }
-        this.dispose();
-        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borrarVueloButtonActionPerformed
 
 

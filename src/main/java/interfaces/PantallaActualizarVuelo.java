@@ -1,5 +1,6 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Avion;
 import entities.Miembro;
 import entities.Piloto;
@@ -9,6 +10,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.hibernate.Session;
@@ -20,11 +22,13 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
     private Vuelo actualizarVuelo;
     private List<Integer> listaDePilotos;
     private List<Integer> listaDeMiembros;
+    private ControlDeExcepciones error;
 
     public PantallaActualizarVuelo(Session session) {
         initComponents();
         this.session = session;
         this.actualizarVuelo = null;
+        error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
@@ -88,14 +92,14 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         idDeVueloTextField = new javax.swing.JTextField();
         buscarIDVueloButton = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        anioTextField = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        mesTextField = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        diaTextField = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         tipoDeAvionTextfield = new javax.swing.JTextField();
         idAvionTextField = new javax.swing.JTextField();
+        mesCombo = new javax.swing.JComboBox<>();
+        diaCombo = new javax.swing.JComboBox<>();
+        anioCombo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,21 +182,9 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
 
         jLabel9.setText("AÑO");
 
-        anioTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        anioTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        anioTextField.setMaximumSize(null);
-
         jLabel10.setText("MES");
 
-        mesTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        mesTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        mesTextField.setMaximumSize(null);
-
         jLabel11.setText("DÍA");
-
-        diaTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        diaTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        diaTextField.setMaximumSize(null);
 
         jLabel12.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel12.setText("Avión del vuelo:");
@@ -200,12 +192,20 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         tipoDeAvionTextfield.setEditable(false);
         tipoDeAvionTextfield.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         tipoDeAvionTextfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        tipoDeAvionTextfield.setEnabled(false);
         tipoDeAvionTextfield.setMaximumSize(null);
 
         idAvionTextField.setEditable(false);
         idAvionTextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         idAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        idAvionTextField.setEnabled(false);
         idAvionTextField.setMaximumSize(null);
+
+        mesCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
+        diaCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" }));
+
+        anioCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035", "2036", "2037", "2038", "2039", "2040", "2041", "2042", "2043", "2044", "2045", "2046", "2047", "2048", "2049", "2050", "2051", "2052", "2053", "2054", "2055", "2056", "2057", "2058", "2059", "2060", "2061", "2062", "2063", "2064", "2065", "2066", "2067", "2068", "2069", "2070", "2071", "2072", "2073", "2074", "2075", "2076", "2077" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -226,7 +226,7 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
                                 .addComponent(horadeDeVueloJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                                 .addComponent(horarioJslider, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,16 +247,10 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                                         .addGap(11, 11, 11)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel10)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tipoDeAvionTextfield, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,11 +265,17 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                                                         .addComponent(buscarIDVueloButton))
                                                     .addComponent(origenDelVueloTextField)
                                                     .addComponent(destinoDelVueloTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGap(4, 4, 4))))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(tipoDeAvionTextfield, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                                .addGap(4, 4, 4))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                .addComponent(anioCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jLabel10)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(mesCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jLabel11)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(diaCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                         .addGap(24, 24, 24)))
                 .addContainerGap())
         );
@@ -310,11 +310,11 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(anioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(mesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
-                    .addComponent(diaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mesCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(diaCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(anioCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,90 +362,110 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
         String origenDeVuelo = origenDelVueloTextField.getText();
         String destinoDeVuelo = destinoDelVueloTextField.getText();
         String horaDeVuelo = horadeDeVueloJLabel.getText();
-        String anioFecha = anioTextField.getText();
-        String mesFecha = mesTextField.getText();
-        String diaFecha = diaTextField.getText();
-        Date fechaDeVuelo = Date.valueOf(formateoDeFecha(anioFecha, mesFecha, diaFecha));
+        String anioFecha = anioCombo.getSelectedItem().toString();
+        String mesFecha = mesCombo.getSelectedItem().toString();
+        String diaFecha = diaCombo.getSelectedItem().toString();
+        Date fechaDeVuelo = null;
 
-        actualizarVuelo.setNum_vuelo(Integer.parseInt(numeroDeVuelo));
-        actualizarVuelo.setOrigen(origenDeVuelo);
-        actualizarVuelo.setDestino(destinoDeVuelo);
-        actualizarVuelo.setHora(horaDeVuelo);
-        actualizarVuelo.setFecha(fechaDeVuelo);
-        actualizarVuelo.setPiloto(pilotoDelVuelo(comboBoxPiloto.getSelectedItem().toString()));
-        actualizarVuelo.setMiembro(miembroDelVuelo(comboBoxMiembro.getSelectedItem().toString()));
+        if (!error.estaVacio(numeroDeVuelo)
+                && !error.estaVacio(origenDeVuelo)
+                && !error.estaVacio(destinoDeVuelo)
+                && !error.estaVacio(anioFecha)
+                && !error.estaVacio(mesFecha)
+                && !error.estaVacio(diaFecha)
+                && error.esUnNumero(numeroDeVuelo)) {
+            
+            fechaDeVuelo = Date.valueOf(formateoDeFecha(anioFecha, mesFecha, diaFecha));
 
-        try {
+            actualizarVuelo.setNum_vuelo(Integer.parseInt(numeroDeVuelo));
+            actualizarVuelo.setOrigen(origenDeVuelo);
+            actualizarVuelo.setDestino(destinoDeVuelo);
+            actualizarVuelo.setHora(horaDeVuelo);
+            actualizarVuelo.setFecha(fechaDeVuelo);
+            actualizarVuelo.setPiloto(pilotoDelVuelo(comboBoxPiloto.getSelectedItem().toString()));
+            actualizarVuelo.setMiembro(miembroDelVuelo(comboBoxMiembro.getSelectedItem().toString()));
 
-            transaction = session.beginTransaction();
-            session.merge(actualizarVuelo);
-            transaction.commit();
+            try {
 
-        } catch (Exception e) {
+                transaction = session.beginTransaction();
+                session.merge(actualizarVuelo);
+                transaction.commit();
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder("ERROR a crear el vuelo...\n"
-                        + "el avión solo puede estar asignado a más de un vuelo."
-                        + e.getMessage());
+            } catch (Exception e) {
+
+                if (transaction != null) {
+                    transaction.rollback();
+                    posibleError = new StringBuilder("ERROR a crear el vuelo...\n"
+                            + "el avión solo puede estar asignado a más de un vuelo."
+                            + e.getMessage());
+                }
+                e.printStackTrace();
             }
-            e.printStackTrace();
+
+            this.dispose();
+            PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
+
+        } else {
+            if (error.estaVacio(numeroDeVuelo)
+                    || error.estaVacio(origenDeVuelo)
+                    || error.estaVacio(destinoDeVuelo)) {
+                JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacíos.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (!error.esUnNumero(numeroDeVuelo)) {
+                JOptionPane.showMessageDialog(null, "El campo Número de vuelo solo admiten números.", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        this.dispose();
-        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_actualizarVueloButtonActionPerformed
 
     private void buscarIDVueloButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarIDVueloButtonActionPerformed
 
         String idVuelo = idDeVueloTextField.getText();
+        String anio;
+        String mes;
+        String dia;
 
-        try {
+        if (!error.estaVacio(idVuelo) & error.esUnNumero(idVuelo)) {
 
-            actualizarVuelo = session.get(Vuelo.class, idVuelo);
+            try {
 
-            String anio;
-            String mes;
-            String dia;
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(actualizarVuelo.getFecha());
-            anio = String.valueOf(calendar.get(Calendar.YEAR));
-            mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-            dia = String.valueOf(calendar.get(Calendar.DATE));
+                actualizarVuelo = session.get(Vuelo.class, idVuelo);
 
-            if (actualizarVuelo != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(actualizarVuelo.getFecha());
+                anio = String.valueOf(calendar.get(Calendar.YEAR));
+                mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                dia = String.valueOf(calendar.get(Calendar.DATE));
 
-                numeroDeVueloTextfield.setEnabled(true);
-                origenDelVueloTextField.setEnabled(true);
-                destinoDelVueloTextField.setEnabled(true);
-                horadeDeVueloJLabel.setEnabled(true);
-                anioTextField.setEnabled(true);
-                mesTextField.setEnabled(true);
-                diaTextField.setEnabled(true);
-                horarioJslider.setEnabled(true);
-                comboBoxPiloto.setEnabled(true);
-                comboBoxMiembro.setEnabled(true);
+                if (actualizarVuelo != null) {
 
-                numeroDeVueloTextfield.setText(String.valueOf(actualizarVuelo.getNum_vuelo()));
-                origenDelVueloTextField.setText(actualizarVuelo.getOrigen());
-                destinoDelVueloTextField.setText(actualizarVuelo.getDestino());
-                horadeDeVueloJLabel.setText(String.valueOf(actualizarVuelo.getHora()));
-                anioTextField.setText(anio);
-                mesTextField.setText(mes);
-                diaTextField.setText(dia);
-                idAvionTextField.setText(String.valueOf(actualizarVuelo.getAvion().getId()));
-                tipoDeAvionTextfield.setText(actualizarVuelo.getAvion().getTipoAvion());
+                    numeroDeVueloTextfield.setEnabled(true);
+                    origenDelVueloTextField.setEnabled(true);
+                    destinoDelVueloTextField.setEnabled(true);
+                    horadeDeVueloJLabel.setEnabled(true);
+                    anioCombo.setEnabled(true);
+                    mesCombo.setEnabled(true);
+                    diaCombo.setEnabled(true);
+                    horarioJslider.setEnabled(true);
+                    comboBoxPiloto.setEnabled(true);
+                    comboBoxMiembro.setEnabled(true);
 
-            } else {
+                    numeroDeVueloTextfield.setText(String.valueOf(actualizarVuelo.getNum_vuelo()));
+                    origenDelVueloTextField.setText(actualizarVuelo.getOrigen());
+                    destinoDelVueloTextField.setText(actualizarVuelo.getDestino());
+                    horadeDeVueloJLabel.setText(String.valueOf(actualizarVuelo.getHora()));
+                    anioCombo.setSelectedItem(anio);
+                    mesCombo.setSelectedItem(mes);
+                    diaCombo.setSelectedItem(dia);
+                    idAvionTextField.setText(String.valueOf(actualizarVuelo.getAvion().getId()));
+                    tipoDeAvionTextfield.setText(actualizarVuelo.getAvion().getTipoAvion());
 
-                throw new Exception();
-
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "No existe ningún vuelo con ese ID", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
 
-        } catch (Exception e) {
-
-            //Lanzar un panel que te diga que ese avion no existe en la base de datos
+            JOptionPane.showMessageDialog(null, "El ID de vuelo solo admiten números y no puede estar vacio", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        System.out.println(actualizarVuelo.toString());
     }//GEN-LAST:event_buscarIDVueloButtonActionPerformed
 
     private String formatarHora(float horas) {
@@ -496,13 +516,13 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizarVueloButton;
-    private javax.swing.JTextField anioTextField;
+    private javax.swing.JComboBox<String> anioCombo;
     private javax.swing.JButton buscarIDVueloButton;
     private javax.swing.JButton cancelarInsercionVueloButton;
     private javax.swing.JComboBox<String> comboBoxMiembro;
     private javax.swing.JComboBox<String> comboBoxPiloto;
     private javax.swing.JTextField destinoDelVueloTextField;
-    private javax.swing.JTextField diaTextField;
+    private javax.swing.JComboBox<String> diaCombo;
     private javax.swing.JLabel horadeDeVueloJLabel;
     private javax.swing.JSlider horarioJslider;
     private javax.swing.JTextField idAvionTextField;
@@ -521,7 +541,7 @@ public class PantallaActualizarVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField mesTextField;
+    private javax.swing.JComboBox<String> mesCombo;
     private javax.swing.JTextField numeroDeVueloTextfield;
     private javax.swing.JTextField origenDelVueloTextField;
     private javax.swing.JTextField tipoDeAvionTextfield;

@@ -1,16 +1,20 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Avion;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaInsercionAvion extends javax.swing.JFrame {
 
     private Session session;
+    private ControlDeExcepciones error;
 
     public PantallaInsercionAvion(Session session) {
         initComponents();
         this.session = session;
+        this.error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -144,28 +148,29 @@ public class PantallaInsercionAvion extends javax.swing.JFrame {
         nuevoAvion.setCodigoAvion(codigoAvion);
         nuevoAvion.setTipoAvion(tipoAvion);
 
-        try {
-            transaction = session.beginTransaction();
-            session.createQuery("INSERT INTO Avion (codigoAvion, tipoAvion) VALUES (:codigoAvion, :tipoAvion)")
-                    .setParameter("codigoAvion", nuevoAvion.getCodigoAvion())
-                    .setParameter("tipoAvion", nuevoAvion.getTipoAvion())
-                    .executeUpdate();
-            transaction.commit();
-            
-            posibleError.append("El avión con codigo " + nuevoAvion.getCodigoAvion()
-                    + " y tipo " + nuevoAvion.getTipoAvion()
-                    + " ha sido insertado con éxito.");
+        if (!error.estaVacio(codigoAvion) | !error.estaVacio(tipoAvion)) {
 
-        } catch (Exception e) {
+            try {
+                transaction = session.beginTransaction();
+                session.persist(nuevoAvion);
+                transaction.commit();
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+                this.dispose();
+                PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
+
+            } catch (Exception e) {
+
+                if (transaction != null) {
+                    transaction.rollback();
+                    posibleError = new StringBuilder("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                            + e.getMessage());
+                }
             }
+            this.dispose();
+            PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
+        } else {
+            JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        this.dispose();
-        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_insertarAvionButtonActionPerformed
 
 

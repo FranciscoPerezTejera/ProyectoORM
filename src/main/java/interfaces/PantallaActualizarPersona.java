@@ -122,7 +122,7 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         });
 
         actualizarPersonaJButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        actualizarPersonaJButton.setText("INSERTAR");
+        actualizarPersonaJButton.setText("ACTUALIZAR");
         actualizarPersonaJButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualizarPersonaJButtonActionPerformed(evt);
@@ -259,14 +259,11 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         String codigoPersona = codigoPersonaTextField.getText();
         String nombrePersona = nombrePersonaTextfield.getText();
         String horasDeVuelo = horasDeVueloPilotoTextField.getText();
-        
-        System.out.println(error.estaVacio(codigoPersona));
-        System.out.println(error.estaVacio(nombrePersona));
-        System.out.println(error.esUnNumero(horasDeVuelo));
 
         if (!error.estaVacio(codigoPersona)
-                & !error.estaVacio(nombrePersona)
-                & error.esUnNumero(horasDeVuelo)) {
+                && !error.estaVacio(nombrePersona)
+                && !error.estaVacio(horasDeVuelo)
+                && error.esUnNumero(horasDeVuelo)) {
 
             try {
 
@@ -309,12 +306,12 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
             PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
 
         } else {
-
-            if (!error.esUnNumero(horasDeVuelo)) {
-                JOptionPane.showMessageDialog(null, "Las horas solo admiten números", "ERROR", JOptionPane.ERROR_MESSAGE);
+            if (error.estaVacio(horasDeVuelo)) {
+                JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+            } else if (!error.esUnNumero(horasDeVuelo)) {
+                JOptionPane.showMessageDialog(null, "Las horas de vuelo solo admiten números", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
-
             }
         }
     }//GEN-LAST:event_actualizarPersonaJButtonActionPerformed
@@ -325,14 +322,14 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
         Piloto pilotoComprobacion = null;
         Miembro miembroComprobacion = null;
 
-        if (isPiloto.isSelected()) {
-            pilotoComprobacion = session.get(Piloto.class, idPersona);
+        if (!error.estaVacio(idPersona) & error.esUnNumero(idPersona)) {
 
-        } else if (isMiembro.isSelected()) {
-            miembroComprobacion = session.get(Miembro.class, idPersona);
-        }
+            if (isPiloto.isSelected()) {
+                pilotoComprobacion = session.get(Piloto.class, idPersona);
 
-        if (!error.estaVacio(idPersona)) {
+            } else if (isMiembro.isSelected()) {
+                miembroComprobacion = session.get(Miembro.class, idPersona);
+            }
 
             try {
 
@@ -361,12 +358,17 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
                 }
 
             } catch (Exception e) {
-
                 JOptionPane.showMessageDialog(null, "No existe ningún piloto o miembro con ese ID", "ERROR", JOptionPane.ERROR_MESSAGE);
-
             }
         } else {
-            JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+            if (error.estaVacio(idPersona)) {
+                JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+            } else if (!error.esUnNumero(idPersona)) {
+                JOptionPane.showMessageDialog(null, "EL ID solo admiten números", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
 
     }//GEN-LAST:event_buscarIDPersonaButtonActionPerformed

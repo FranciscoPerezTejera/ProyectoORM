@@ -1,16 +1,21 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Avion;
+import entities.Piloto;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaBorradoAvion extends javax.swing.JFrame {
 
     private Session session;
+    private ControlDeExcepciones error;
 
     public PantallaBorradoAvion(Session session) {
         initComponents();
         this.session = session;
+        error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -45,7 +50,7 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
         idAvionTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         borrarAvionButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        borrarAvionButton.setText("INSERTAR");
+        borrarAvionButton.setText("BORRAR");
         borrarAvionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 borrarAvionButtonActionPerformed(evt);
@@ -65,16 +70,17 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cancelarBorradoButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(borrarAvionButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                         .addGap(30, 30, 30)
-                        .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(idAvionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cancelarBorradoButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(borrarAvionButton)))
                 .addGap(51, 51, 51))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -116,32 +122,30 @@ public class PantallaBorradoAvion extends javax.swing.JFrame {
         StringBuilder posibleError = new StringBuilder("El avión con ID " + idAvionTextField.getText() + ", ha sido eliminado correctamente.\n");
         Transaction transaction = null;
         String idAvion = idAvionTextField.getText();
+        Avion borrarAvion = null;
 
-        try {
-            transaction = session.beginTransaction();
-            session.createQuery("DELETE FROM Avion WHERE id = :idAvion")
-                    .setParameter("idAvion", idAvion)
-                    .executeUpdate();
+        if (!error.estaVacio(idAvion) && error.esUnNumero(idAvion)) {
 
-            transaction.commit();
+            try {
+                transaction = session.beginTransaction();
+                borrarAvion = session.get(Avion.class, idAvion);
+                session.remove(borrarAvion);
+                transaction.commit();
 
-        } catch (Exception e) {
+                this.dispose();
+                PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
 
-            if (transaction != null) {
+            } catch (Exception e) {
+                
                 transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Ese ID de avión no existe en la base de datos.", "ERROR", JOptionPane.ERROR_MESSAGE);
 
-            } else {
-                posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + idAvionTextField.getText() + ", "
-                        + "no se ha podido eliminar por un ERROR, cancelando operación...\n"
-                        + e.getMessage());
             }
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "El ID solo admite números\n y no puede estar vacio el campo", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        this.dispose();
-        PantallaPrincipal newPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_borrarAvionButtonActionPerformed
 
     private void cancelarBorradoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarBorradoButtonActionPerformed
