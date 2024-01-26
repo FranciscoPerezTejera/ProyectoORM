@@ -4,6 +4,7 @@ import entities.Avion;
 import entities.Miembro;
 import entities.Piloto;
 import entities.Vuelo;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaPrincipal extends javax.swing.JFrame {
-    
+
     private Session session;
     StringBuilder posibleError;
 
@@ -66,6 +67,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         consultaTablaMiembro = new javax.swing.JMenuItem();
         consultaTablaVuelo = new javax.swing.JMenuItem();
         consultaTablaAvion = new javax.swing.JMenuItem();
+        consutlasExtras = new javax.swing.JMenu();
+        extraUno = new javax.swing.JMenuItem();
+        extraDos = new javax.swing.JMenuItem();
+        extraTres = new javax.swing.JMenuItem();
+        extraCuatro = new javax.swing.JMenuItem();
         disconnectJMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -83,6 +89,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         textArea.setFocusable(false);
         jScrollPane1.setViewportView(textArea);
 
+        tablaDeDatos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tablaDeDatos.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         tablaDeDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -91,9 +99,18 @@ public class PantallaPrincipal extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "  ", "   ", "   ", "   "
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaDeDatos.setEnabled(false);
         jScrollPane2.setViewportView(tablaDeDatos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -265,6 +282,42 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(consultaDeDatos);
 
+        consutlasExtras.setText("CONSULTAS EXTRAS");
+
+        extraUno.setText("Contar la cantidad de vuelos realizados por cada piloto");
+        extraUno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                extraUnoActionPerformed(evt);
+            }
+        });
+        consutlasExtras.add(extraUno);
+
+        extraDos.setText("Obtener la lista de miembros ordenados por la cantidad de vuelos realizados");
+        extraDos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                extraDosActionPerformed(evt);
+            }
+        });
+        consutlasExtras.add(extraDos);
+
+        extraTres.setText("Obtener todos los vuelos con información completa");
+        extraTres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                extraTresActionPerformed(evt);
+            }
+        });
+        consutlasExtras.add(extraTres);
+
+        extraCuatro.setText("Obtener el piloto con más vuelos");
+        extraCuatro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                extraCuatroActionPerformed(evt);
+            }
+        });
+        consutlasExtras.add(extraCuatro);
+
+        jMenuBar1.add(consutlasExtras);
+
         disconnectJMenu.setText("SALIR");
         disconnectJMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         disconnectJMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -388,7 +441,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void consultaTablaVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaVueloActionPerformed
 
-         List<Vuelo> listaVuelos = listadeVuelos();
+        List<Vuelo> listaVuelos = listadeVuelos();
 
         //"ID", "Numero_Vuelo", "Origen, Destino, Hora, Fecha, Piloto, Miembro, Avión
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -398,9 +451,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         tableModel.addColumn("DESTINO");
         tableModel.addColumn("HORA");
         tableModel.addColumn("FECHA");
+        tableModel.addColumn("ID_PILOTO");
+        tableModel.addColumn("ID_MIEMBRO");
+        tableModel.addColumn("ID_AVIÓN");
 
         listaVuelos.forEach(e -> {
-            tableModel.addRow(new Object[]{e.getId(), e.getNum_vuelo(), e.getOrigen(), e.getDestino(), e.getHora(), e.getFecha().toString()});
+            tableModel.addRow(new Object[]{e.getId(), e.getNum_vuelo(), e.getOrigen(),
+                e.getDestino(), e.getHora(), e.getFecha().toString(), e.getPiloto().getId(),
+                e.getMiembro().getId(), e.getAvion().getId()});
         });
 
         tablaDeDatos.setModel(tableModel);
@@ -408,7 +466,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void consultaTablaAvionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultaTablaAvionActionPerformed
 
-         List<Avion> listaAviones = listadeAviones();
+        List<Avion> listaAviones = listadeAviones();
 
         //"ID", "Código_Avion", "Tipo_Avion"
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -422,6 +480,79 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         tablaDeDatos.setModel(tableModel);
     }//GEN-LAST:event_consultaTablaAvionActionPerformed
+
+    private void extraUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraUnoActionPerformed
+
+        List<Object[]> listaVuelosPorPiloto = catidadVuelosPorPiloto();
+
+        //ID_PILOTO, NOMBRE_PILOTO, TOTAL_VUELOS
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID_PILOTO");
+        tableModel.addColumn("NOMBRE_PILOTO");
+        tableModel.addColumn("TOTAL_VUELOS");
+
+        for (Object[] datos : listaVuelosPorPiloto) {
+            tableModel.addRow(datos);
+        }
+        tablaDeDatos.setModel(tableModel);
+
+    }//GEN-LAST:event_extraUnoActionPerformed
+
+    private void extraDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraDosActionPerformed
+
+        List<Object[]> listaDeMIembros = vuelosRealizadosPorMiembro();
+
+        //ID_PILOTO, NOMBRE_PILOTO, TOTAL_VUELOS
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID_MIEMBRO");
+        tableModel.addColumn("NOMBRE_MIEMBRO");
+        tableModel.addColumn("TOTAL_VUELOS");
+
+        for (Object[] datos : listaDeMIembros) {
+            tableModel.addRow(datos);
+        }
+        tablaDeDatos.setModel(tableModel);
+    }//GEN-LAST:event_extraDosActionPerformed
+
+    private void extraTresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraTresActionPerformed
+
+        List<Object[]> listaDeVuelosCompleta = listaDeVuelosCompletos();
+
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID_VUELO");
+        tableModel.addColumn("NÚMERO_VUELO");
+        tableModel.addColumn("ORIGEN");
+        tableModel.addColumn("DESTINO");
+        tableModel.addColumn("FECHA");
+        tableModel.addColumn("HORA");
+        tableModel.addColumn("CÓDIGO_AVIÓN");
+        tableModel.addColumn("TIPO_AVIÓN");
+        tableModel.addColumn("NOMBRE_PILOTO");
+        tableModel.addColumn("NOMBRE_MIEMBRO");
+
+        for (Object[] datos : listaDeVuelosCompleta) {
+            tableModel.addRow(datos);
+        }
+        tablaDeDatos.setModel(tableModel);
+
+    }//GEN-LAST:event_extraTresActionPerformed
+
+    private void extraCuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraCuatroActionPerformed
+
+        List<Object[]> listaDeVuelosCompleta = pilotoConMasVuelos();
+
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID_PILOTO");
+        tableModel.addColumn("CÓDIGO_PILOTO");
+        tableModel.addColumn("NOMBRE_PILOTO");
+        tableModel.addColumn("TOTAL_VUELOS");
+
+        for (Object[] datos : listaDeVuelosCompleta) {
+            tableModel.addRow(datos);
+        }
+        tablaDeDatos.setModel(tableModel);
+
+    }//GEN-LAST:event_extraCuatroActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -439,7 +570,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem consultaTablaMiembro;
     private javax.swing.JMenuItem consultaTablaPiloto;
     private javax.swing.JMenuItem consultaTablaVuelo;
+    private javax.swing.JMenu consutlasExtras;
     private javax.swing.JMenu disconnectJMenu;
+    private javax.swing.JMenuItem extraCuatro;
+    private javax.swing.JMenuItem extraDos;
+    private javax.swing.JMenuItem extraTres;
+    private javax.swing.JMenuItem extraUno;
     private javax.swing.JMenu insercionDato;
     private javax.swing.JMenuItem insercionDeAvionMenu;
     private javax.swing.JMenuItem insercionDePersonaMenu;
@@ -480,15 +616,132 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         List vuelos = session.createQuery("FROM Vuelo", Vuelo.class).list();
         transaction.commit();
         return vuelos;
-        
+
     }
 
     private List<Avion> listadeAviones() {
-        
+
         Transaction transaction = null;
         transaction = session.beginTransaction();
         List aviones = session.createQuery("FROM Avion", Vuelo.class).list();
         transaction.commit();
         return aviones;
     }
+
+    private List<Object[]> catidadVuelosPorPiloto() {
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hql = "SELECT p.id AS IdPiloto, p.nombrePersona AS Piloto, COUNT(v.id) AS TotalVuelos "
+                    + "FROM Piloto p "
+                    + "LEFT JOIN p.vuelos v "
+                    + "GROUP BY p.id, p.nombrePersona";
+
+            List<Object[]> resultado = session.createQuery(hql).list();
+            transaction.commit();
+
+            return resultado;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            textArea.append("\nNose puede realizar la query por falta de datos en la tabla.");
+            return null;
+        }
+    }
+
+    private List<Object[]> vuelosRealizadosPorMiembro() {
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hql = """
+                    SELECT m.id AS IdMiembro, m.nombrePersona AS Miembro, COUNT(v.id) AS TotalVuelos
+                                FROM Miembro m
+                                LEFT JOIN m.vuelos v
+                                GROUP BY m.id, m.nombrePersona
+                                ORDER BY TotalVuelos DESC
+                         """;
+
+            List<Object[]> resultado = session.createQuery(hql).list();
+            transaction.commit();
+
+            return resultado;
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            textArea.append("\nNose puede realizar la query por falta de datos en la tabla.");
+            return null;
+        }
+    }
+
+    private List<Object[]> listaDeVuelosCompletos() {
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hql = """
+                    SELECT v.id AS IdVuelo, v.num_vuelo, v.origen, v.destino, v.fecha, v.hora, 
+                           a.codigoAvion, a.tipoAvion, 
+                           p.nombrePersona AS NombrePiloto,
+                           m.nombrePersona AS NombreMiembro
+                           FROM Vuelo v
+                           LEFT JOIN v.avion a
+                           LEFT JOIN v.piloto p
+                           LEFT JOIN v.miembro m
+                         """;
+
+            List<Object[]> resultado = session.createQuery(hql).list();
+            transaction.commit();
+
+            return resultado;
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            textArea.append("\nNose puede realizar la query por falta de datos en la tabla.");
+            return null;
+        }
+    }
+    
+    private List<Object[]> pilotoConMasVuelos() {
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hql = """
+                   SELECT p.id AS IdPiloto, p.codigo AS CodigoPiloto, p.nombrePersona AS Piloto, COUNT(v.id) AS TotalVuelos
+                   FROM Piloto p
+                   LEFT JOIN p.vuelos v
+                   GROUP BY p.id, p.codigo, p.nombrePersona
+                   ORDER BY TotalVuelos DESC
+                   LIMIT 1
+                         """;
+
+            List<Object[]> resultado = session.createQuery(hql).list();
+            transaction.commit();
+
+            return resultado;
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            textArea.append("\nNose puede realizar la query por falta de datos en la tabla.");
+            return null;
+        }
+    }
+   
 }

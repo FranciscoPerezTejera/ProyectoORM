@@ -30,13 +30,13 @@ public class Vuelo {
     private String hora;
     @Column (name = "fecha_vuelo")
     private Date fecha;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne()
     @JoinColumn(name = "id_piloto")
     private Piloto piloto;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne()
     @JoinColumn(name = "id_miembro")
     private Miembro miembro;
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne()
     @JoinColumn(name = "id_avion")
     private Avion avion;
     

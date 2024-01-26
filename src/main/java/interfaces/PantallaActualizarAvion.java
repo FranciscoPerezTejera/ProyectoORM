@@ -1,16 +1,22 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Avion;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class PantallaActualizarAvion extends javax.swing.JFrame {
 
     private Session session;
+    private Avion actualizarAvion;
+    private ControlDeExcepciones error;
 
     public PantallaActualizarAvion(Session session) {
         initComponents();
         this.session = session;
+        actualizarAvion = null;
+        this.error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
@@ -65,7 +71,7 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
         });
 
         insertarAvionButton.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        insertarAvionButton.setText("INSERTAR");
+        insertarAvionButton.setText("ACTUALIZAR");
         insertarAvionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 insertarAvionButtonActionPerformed(evt);
@@ -169,40 +175,51 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
 
         StringBuilder posibleError = new StringBuilder("La actualización se realizó correctamente.\n");
         Transaction transaction = null;
-        
+
         String idAvion = idAvionTextField.getText();
         String codigoAvion = codigoAvionTextField.getText();
         String tipoAvion = tipoDeAvionTextField.getText();
 
-        try {
+        if (!error.estaVacio(codigoAvion) | !error.estaVacio(tipoAvion)) {
 
-            transaction = session.beginTransaction();
+            try {
 
-            session.createQuery("UPDATE Avion SET codigoAvion = :codigo, "
-                        + "tipoAvion = :tipoAvion WHERE id = :idAvion")
-                        .setParameter("codigo", codigoAvion)
-                        .setParameter("tipoAvion", tipoAvion)
-                        .setParameter("idAvion", idAvion)
-                        .executeUpdate();
-            transaction.commit();
+                if (actualizarAvion != null) {
 
-        } catch (Exception e) {
+                    actualizarAvion.setCodigoAvion(codigoAvion);
+                    actualizarAvion.setTipoAvion(tipoAvion);
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+                    transaction = session.beginTransaction();
+                    session.merge(actualizarAvion);
+                    transaction.commit();
 
-            } else {
-                posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + idAvionTextField.getText() + ", "
-                        + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
-                        + e.getMessage());
+                } else {
+
+                    throw new Exception();
+                }
+
+            } catch (Exception e) {
+
+                if (transaction != null) {
+                    transaction.rollback();
+                    posibleError = new StringBuilder();
+                    posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                            + e.getMessage());
+
+                } else {
+                    posibleError = new StringBuilder();
+                    posibleError.append("El avión con ID " + idAvionTextField.getText() + ", "
+                            + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
+                            + e.getMessage());
+                }
             }
+
+            this.dispose();
+            PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
-        this.dispose();
-        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_insertarAvionButtonActionPerformed
 
     private void comprobarIDButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprobarIDButtonActionPerformed
@@ -220,13 +237,14 @@ public class PantallaActualizarAvion extends javax.swing.JFrame {
 
                 codigoAvionTextField.setEnabled(true);
                 tipoDeAvionTextField.setEnabled(true);
+                idAvionTextField.setEnabled(false);
                 codigoAvionTextField.setText(String.valueOf(avionComprobacion.getCodigoAvion()));
                 tipoDeAvionTextField.setText(avionComprobacion.getTipoAvion());
+                actualizarAvion = avionComprobacion;
             }
 
         } catch (Exception e) {
-
-            //Lanzar un panel que te diga que ese avion no existe en la base de datos
+            JOptionPane.showMessageDialog(null, "ID erróneo, no existe en la tabla", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_comprobarIDButtonActionPerformed

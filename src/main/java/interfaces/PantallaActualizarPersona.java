@@ -1,7 +1,9 @@
 package interfaces;
 
+import Utiles.ControlDeExcepciones;
 import entities.Miembro;
 import entities.Piloto;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -10,12 +12,14 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
     private Session session;
     private Piloto actualizarPiloto;
     private Miembro actualizarMiembro;
+    private ControlDeExcepciones error;
 
     public PantallaActualizarPersona(Session session) {
         initComponents();
         this.session = session;
         this.actualizarPiloto = null;
         this.actualizarMiembro = null;
+        error = new ControlDeExcepciones();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
@@ -250,55 +254,69 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
 
         StringBuilder posibleError = new StringBuilder("La actualización se realizó correctamente.\n");
         Transaction transaction = null;
-        
+
         String idPersona = idPersonaTextField.getText();
         String codigoPersona = codigoPersonaTextField.getText();
         String nombrePersona = nombrePersonaTextfield.getText();
         String horasDeVuelo = horasDeVueloPilotoTextField.getText();
+        
+        System.out.println(error.estaVacio(codigoPersona));
+        System.out.println(error.estaVacio(nombrePersona));
+        System.out.println(error.esUnNumero(horasDeVuelo));
 
-        try {
-            transaction = session.beginTransaction();
-            if (actualizarPiloto != null) {
+        if (!error.estaVacio(codigoPersona)
+                & !error.estaVacio(nombrePersona)
+                & error.esUnNumero(horasDeVuelo)) {
 
-                session.createQuery("UPDATE Piloto SET codigo = :codigo, "
-                        + "nombrePersona = :nombrePersona, "
-                        + "horaDeVuelo = :horaDeVuelo WHERE id = :idPersona", Piloto.class)
-                        .setParameter("codigo", codigoPersona)
-                        .setParameter("nombrePersona", nombrePersona)
-                        .setParameter("horaDeVuelo", Integer.parseInt(horasDeVuelo))
-                        .setParameter("idPersona", idPersona)
-                        .executeUpdate();
+            try {
 
-            } else if (actualizarMiembro != null) {
+                transaction = session.beginTransaction();
 
-                session.createQuery("UPDATE Miembro SET codigo = :codigo, "
-                        + "nombrePersona = :nombrePersona WHERE id = :idPersona", Miembro.class)
-                        .setParameter("codigo", codigoPersona)
-                        .setParameter("nombrePersona", nombrePersona)
-                        .setParameter("idPersona", idPersona)
-                        .executeUpdate();
+                if (actualizarPiloto != null) {
+
+                    actualizarPiloto.setCodigo(codigoPersona);
+                    actualizarPiloto.setNombrePersona(nombrePersona);
+                    actualizarPiloto.setHoraDeVuelo(Integer.parseInt(horasDeVuelo));
+                    session.merge(actualizarPiloto);
+
+                } else if (actualizarMiembro != null) {
+
+                    actualizarMiembro.setCodigo(codigoPersona);
+                    actualizarMiembro.setNombrePersona(nombrePersona);
+                    session.merge(actualizarMiembro);
+
+                }
+
+                transaction.commit();
+
+            } catch (Exception e) {
+
+                if (transaction != null) {
+                    transaction.rollback();
+                    posibleError = new StringBuilder();
+                    posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
+                            + e.getMessage());
+
+                } else {
+                    posibleError = new StringBuilder();
+                    posibleError.append("El avión con ID " + idPersonaTextField.getText() + ", "
+                            + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
+                            + e.getMessage());
+                }
+                e.printStackTrace();
             }
-            
-            transaction.commit();
-            
-        } catch (Exception e) {
+            this.dispose();
+            PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
 
-            if (transaction != null) {
-                transaction.rollback();
-                posibleError = new StringBuilder();
-                posibleError.append("La transacción no pudo iniciarse correctamente... Cancelando operación...\n"
-                        + e.getMessage());
+        } else {
 
+            if (!error.esUnNumero(horasDeVuelo)) {
+                JOptionPane.showMessageDialog(null, "Las horas solo admiten números", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
-                posibleError = new StringBuilder();
-                posibleError.append("El avión con ID " + idPersonaTextField.getText() + ", "
-                        + "no se ha podido actualizar por un ERROR, cancelando operación...\n"
-                        + e.getMessage());
+                JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
+
             }
-            e.printStackTrace();
         }
-        this.dispose();
-        PantallaPrincipal nuevaPantallaPrincipal = new PantallaPrincipal(session, posibleError);
     }//GEN-LAST:event_actualizarPersonaJButtonActionPerformed
 
     private void buscarIDPersonaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarIDPersonaButtonActionPerformed
@@ -314,38 +332,41 @@ public class PantallaActualizarPersona extends javax.swing.JFrame {
             miembroComprobacion = session.get(Miembro.class, idPersona);
         }
 
-        System.out.println(pilotoComprobacion);
-        System.err.println(miembroComprobacion);
+        if (!error.estaVacio(idPersona)) {
 
-        try {
+            try {
 
-            if (isPiloto.isSelected() & pilotoComprobacion != null) {
+                if (isPiloto.isSelected() & pilotoComprobacion != null) {
 
-                codigoPersonaTextField.setEnabled(true);
-                nombrePersonaTextfield.setEnabled(true);
-                horasDeVueloPilotoTextField.setEnabled(true);
-                codigoPersonaTextField.setText(String.valueOf(pilotoComprobacion.getCodigo()));
-                nombrePersonaTextfield.setText(pilotoComprobacion.getNombrePersona());
-                horasDeVueloPilotoTextField.setText(String.valueOf(pilotoComprobacion.getHoraDeVuelo()));
-                actualizarPiloto = pilotoComprobacion;
+                    codigoPersonaTextField.setEnabled(true);
+                    nombrePersonaTextfield.setEnabled(true);
+                    horasDeVueloPilotoTextField.setEnabled(true);
+                    codigoPersonaTextField.setText(String.valueOf(pilotoComprobacion.getCodigo()));
+                    nombrePersonaTextfield.setText(pilotoComprobacion.getNombrePersona());
+                    horasDeVueloPilotoTextField.setText(String.valueOf(pilotoComprobacion.getHoraDeVuelo()));
+                    actualizarPiloto = pilotoComprobacion;
 
-            } else if (isMiembro.isSelected() & miembroComprobacion != null) {
+                } else if (isMiembro.isSelected() & miembroComprobacion != null) {
 
-                codigoPersonaTextField.setEnabled(true);
-                nombrePersonaTextfield.setEnabled(true);
-                codigoPersonaTextField.setText(String.valueOf(miembroComprobacion.getCodigo()));
-                nombrePersonaTextfield.setText(miembroComprobacion.getNombrePersona());
-                actualizarMiembro = miembroComprobacion;
+                    codigoPersonaTextField.setEnabled(true);
+                    nombrePersonaTextfield.setEnabled(true);
+                    codigoPersonaTextField.setText(String.valueOf(miembroComprobacion.getCodigo()));
+                    nombrePersonaTextfield.setText(miembroComprobacion.getNombrePersona());
+                    actualizarMiembro = miembroComprobacion;
 
-            } else {
+                } else {
 
-                throw new Exception();
+                    throw new Exception();
+
+                }
+
+            } catch (Exception e) {
+
+                JOptionPane.showMessageDialog(null, "No existe ningún piloto o miembro con ese ID", "ERROR", JOptionPane.ERROR_MESSAGE);
 
             }
-
-        } catch (Exception e) {
-
-            //Lanzar un panel que te diga que ese avion no existe en la base de datos
+        } else {
+            JOptionPane.showMessageDialog(null, "los campos no pueden estar vacios", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_buscarIDPersonaButtonActionPerformed

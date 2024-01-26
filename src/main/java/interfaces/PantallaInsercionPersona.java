@@ -8,10 +8,12 @@ import org.hibernate.Transaction;
 public class PantallaInsercionPersona extends javax.swing.JFrame {
 
     private Session session;
-
+    private boolean esPiloto;
+    
     public PantallaInsercionPersona(Session session) {
         initComponents();
         this.session = session;
+        esPiloto = false;
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
@@ -21,12 +23,15 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
 
                 horasDeVueloJLabel.setEnabled(true);
                 horasDeVueloPilotoTextField.setEnabled(true);
+                esPiloto = true;
+                
 
             } else {
 
                 horasDeVueloJLabel.setEnabled(false);
                 horasDeVueloPilotoTextField.setEnabled(false);
                 horasDeVueloPilotoTextField.setText("");
+                esPiloto = false;
             }
 
         });
@@ -189,7 +194,7 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
         Piloto nuevoPiloto = null;
         Miembro nuevoMiembro = null;
 
-        if (isPiloto.isSelected()) {
+        if (esPiloto) {
             String horasDeVuelo = horasDeVueloPilotoTextField.getText();
             nuevoPiloto = new Piloto();
             nuevoPiloto.setCodigo(codigoPersona);
@@ -204,25 +209,18 @@ public class PantallaInsercionPersona extends javax.swing.JFrame {
             posibleError.append("El miembro llamado " + nuevoMiembro.getNombrePersona() + " ha sido insertado con éxito.");
 
         }
+        
         try {
 
             transaction = session.beginTransaction();
 
             if (nuevoPiloto != null) {
-                session.createQuery("INSERT INTO Piloto (codigo, nombrePersona, horaDeVuelo) VALUES (:codigo, :nombrePersona, :horaDeVuelo)")
-                        .setParameter("codigo", nuevoPiloto.getCodigo())
-                        .setParameter("nombrePersona", nuevoPiloto.getNombrePersona())
-                        .setParameter("horaDeVuelo", nuevoPiloto.getHoraDeVuelo())
-                        .executeUpdate();
+                session.persist(nuevoPiloto);
             } else if (nuevoMiembro != null) {
-                session.createQuery("INSERT INTO Miembro (codigo, nombrePersona) VALUES (:codigo, :nombrePersona)")
-                        .setParameter("codigo", nuevoMiembro.getCodigo())
-                        .setParameter("nombrePersona", nuevoMiembro.getNombrePersona())
-                        .executeUpdate();
+                session.persist(nuevoMiembro);
             }
-
             transaction.commit();
-
+            
         } catch (Exception e) {
 
             if (transaction != null) {
